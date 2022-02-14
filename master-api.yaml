@@ -1,0 +1,2774 @@
+openapi: 3.0.0
+info:
+  title: Master API Duitku
+  version: 1.0.0
+  description: "\n\n## \U0001F4AB Overview\n\nOverview Master API Duitku\n\n### \U0001F6E1️ Request Header\nHTTP headers allow the client and the server to pass additional information with the request or the response. A HTTP header consists of its case-insensitive name followed by a colon ':', then by its value (without line breaks), leading by space before the value is ignored.\n\n* __X-duitku-code__\n\n    Duitku code is provided by Duitku.\n\n* __X-duitku-timestamp__\n\n    X-duitku-timestamp is the timestamp of the request. It used UNIX Timestamp.\n\n* __X-duitku-signature__\n\n    The signature is required all request. Signature using hmac and sha256 with request method, relative path, time stamp, hash of entity body, API key and validation key as parameters.\n    \n#### Signature Algorithm\n__signature__ = <b>hmac_sha256(upper(method)+\":\"+path+\":\"+duitku code+\":\"+lower(sha256(body))+\":\"+timestamp, secret key)</b><br/>\n```javascript\nconst moment = require(\"moment\");\n\nfunction getPath(url) {\n    var pathRegex = /.+?\\:\\/\\/.+?(\\/.+?)(?:#|\\?|$)/;\n    var result = url.match(pathRegex);\n    return result && result.length > 1 ? result[1] : ''; \n}\n\nvar timeNow = moment().valueOf();\nvar body = JSON.stringify('your_request_body');\nvar secret_key = 'your_secret_key';\nvar path = getPath(request['url']);\nvar duitku_code = 'your_duitku_code';\nvar method = 'your_request_method'.toUpperCase();\n// Hash Body\nvar body_hash = CryptoJS.SHA256(body).toString().toLowerCase();\n// Plain Text Signature\nvar signaturePlainText = method+\":\"+path+\":\"+duitku_code+\":\"+body_hash+\":\"+timeNow;\n// Signatuere\nvar signature = CryptoJS.HmacSHA256(signaturePlainText, secret_key).toString().toLowerCase();\n```\n "
+  contact:
+    name: Duitku IT Support
+    email: it@duitku.com
+    url: 'mailto:it@duitku.com'
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  termsOfService: 'https://www.duitku.com/kebijakan-privasi/'
+servers:
+  - url: 'https://master-api.duitku.com'
+    description: Production
+  - description: Sandbox
+    url: 'https://master-api-sandbox.duitku.com'
+paths:
+  '/balance/{merchantId}':
+    get:
+      summary: Balance Merchant
+      operationId: get-balance
+      description: Return a balance of merchant
+      parameters:
+        - $ref: '#/components/parameters/X-duitku-code'
+        - $ref: '#/components/parameters/X-duitku-timestamp'
+        - $ref: '#/components/parameters/X-duitku-signature'
+      security: []
+      tags:
+        - Balance
+      responses:
+        '200':
+          description: Return detail balance by Id Merchant
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Balance'
+              examples: {}
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    parameters:
+      - $ref: '#/components/parameters/merchantId'
+  '/balance/{merchantId}/history':
+    parameters:
+      - name: merchantId
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: ID of Merchant
+    get:
+      summary: Balance History
+      responses:
+        '200':
+          description: Return balance mutation of merchant
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceHistory'
+              examples:
+                example-1:
+                  value:
+                    - registerDate: string
+                      amount: 0
+                      type: C
+                      lastBalance: 0
+                      description: string
+                      reference: string
+      operationId: get-balance-merchantId-history
+      parameters:
+        - $ref: '#/components/parameters/dateFrom'
+        - $ref: '#/components/parameters/dateTo'
+        - $ref: '#/components/parameters/X-duitku-code'
+        - $ref: '#/components/parameters/X-duitku-timestamp'
+        - $ref: '#/components/parameters/X-duitku-signature'
+      description: Return historical list of merchant balances according to the specified date range (Balance mutation).
+      tags:
+        - Balance
+  '/history/{merchantId}/moneyin':
+    parameters:
+      - $ref: '#/components/parameters/merchantId'
+    get:
+      summary: Money In
+      tags:
+        - History
+      responses:
+        '200':
+          description: Return list history money in to the balance merchant
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MoneyIn'
+      operationId: get-history-merchantId-moneyin
+      parameters:
+        - $ref: '#/components/parameters/X-duitku-code'
+        - $ref: '#/components/parameters/X-duitku-timestamp'
+        - $ref: '#/components/parameters/X-duitku-signature'
+        - $ref: '#/components/parameters/dateFrom'
+        - $ref: '#/components/parameters/dateTo'
+      description: Return list of the history of money entering the merchant's balance according to the specified date range
+  '/history/{merchantId}/moneyout':
+    parameters:
+      - $ref: '#/components/parameters/merchantId'
+    get:
+      summary: Money Out
+      tags:
+        - History
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MoneyOut'
+      operationId: get-history-merchantId-moneyout
+      parameters:
+        - $ref: '#/components/parameters/X-duitku-code'
+        - $ref: '#/components/parameters/X-duitku-timestamp'
+        - $ref: '#/components/parameters/X-duitku-signature'
+        - $ref: '#/components/parameters/dateFrom'
+        - $ref: '#/components/parameters/dateTo'
+  '/merchant/{merchantId}':
+    parameters:
+      - name: merchantId
+        in: path
+        required: true
+        schema:
+          type: integer
+          example: 1
+        description: ID of Merchant
+    get:
+      summary: Merchant Detail
+      tags:
+        - Merchant
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MerchantDetail'
+      operationId: get-merchant-merchantId
+      parameters:
+        - $ref: '#/components/parameters/X-duitku-code'
+        - $ref: '#/components/parameters/X-duitku-timestamp'
+        - $ref: '#/components/parameters/X-duitku-signature'
+    put:
+      summary: Update Detail Merchant
+      operationId: put-merchant-merchantId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MerchantDetail'
+      parameters:
+        - $ref: '#/components/parameters/X-duitku-code'
+        - $ref: '#/components/parameters/X-duitku-timestamp'
+        - $ref: '#/components/parameters/X-duitku-signature'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMerchant'
+      tags:
+        - Merchant
+  /businesstype:
+    get:
+      summary: All Business Type
+      tags:
+        - Merchant
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllBusinessType'
+      operationId: get-businesstype
+  /merchant/:
+    post:
+      summary: Merchant Registration
+      operationId: post-merchant
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MerchantDetail'
+      tags:
+        - Merchant
+      parameters:
+        - $ref: '#/components/parameters/X-duitku-code'
+        - $ref: '#/components/parameters/X-duitku-timestamp'
+        - $ref: '#/components/parameters/X-duitku-signature'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddMerchant'
+    parameters: []
+  '/merchant/{merchantId}/attachment':
+    parameters:
+      - $ref: '#/components/parameters/merchantId'
+    post:
+      summary: Attachment Merchant
+      operationId: post-merchant-merchantId-attachment
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttachmentResponse'
+      tags:
+        - Merchant
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AttachmentRequest'
+        description: ''
+      parameters:
+        - $ref: '#/components/parameters/X-duitku-code'
+        - $ref: '#/components/parameters/X-duitku-timestamp'
+  /api/callback:
+    post:
+      summary: Sample Webhook (Money In)
+      operationId: post-api-callback
+      tags:
+        - Webhook
+      parameters:
+        - $ref: '#/components/parameters/X-duitku-code'
+        - $ref: '#/components/parameters/X-duitku-timestamp'
+        - $ref: '#/components/parameters/X-duitku-signature'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Webhook(MoneyIn)'
+      description: |-
+        <b>Note</b>
+        - For the base url adjust to the base url of the website you are using.
+        - For the string path used for checking signature, especially on webhooks using full path. <br/> Example : `https://your-business-website.com/api/callback`
+components:
+  schemas:
+    Balance:
+      description: ''
+      type: object
+      properties:
+        totalBalance:
+          type: number
+        effectiveBalance:
+          type: number
+      required:
+        - totalBalance
+        - effectiveBalance
+      x-examples:
+        example-1:
+          totalBalance: 1505462393
+          effectiveBalance: 1505462393
+    BalanceHistory:
+      type: array
+      description: ''
+      minItems: 1
+      uniqueItems: true
+      x-examples:
+        example-1:
+          - registerDate: '2022-02-09T09:39:37.303'
+            amount: 9500
+            type: C
+            lastBalance: 1505462393
+            description: PERMATA VA - BTPYD4YXO7NS1M7YC
+            reference: BTPYD4YXO7NS1M7YC
+          - registerDate: '2022-02-08T17:47:06.22'
+            amount: 9500
+            type: C
+            lastBalance: 1505452893
+            description: PERMATA VA - BT0WECK5XZZIBNRKI
+            reference: BT0WECK5XZZIBNRKI
+          - registerDate: '2022-02-08T11:10:08.827'
+            amount: 120000
+            type: C
+            lastBalance: 1505443393
+            description: NOBU QR - 1644293360
+            reference: '1644293360'
+          - registerDate: '2022-02-08T11:03:56.413'
+            amount: 120000
+            type: C
+            lastBalance: 1505323393
+            description: NOBU QR - 1644292988
+            reference: '1644292988'
+          - registerDate: '2022-02-03T16:35:05.99'
+            amount: 11000
+            type: C
+            lastBalance: 1505203393
+            description: NOBU QR - 1643866208
+            reference: '1643866208'
+          - registerDate: '2022-02-02T18:57:53.437'
+            amount: 12000
+            type: D
+            lastBalance: 1505192393
+            description: TEST VOID NOBU
+            reference: TEST VOID NOBU
+          - registerDate: '2022-02-02T16:58:24.3'
+            amount: 12000
+            type: C
+            lastBalance: 1505204393
+            description: NOBU QR - 1643795046
+            reference: '1643795046'
+          - registerDate: '2022-02-02T16:25:48.737'
+            amount: 116500
+            type: C
+            lastBalance: 1505192393
+            description: POS INDONESIA - A28YKTZAPBG21CIBH
+            reference: A28YKTZAPBG21CIBH
+          - registerDate: '2022-02-02T16:25:08.72'
+            amount: 117250
+            type: C
+            lastBalance: 1505075893
+            description: VA ARTHA GRAHA - AGSZ34DHNYH0RR763
+            reference: AGSZ34DHNYH0RR763
+          - registerDate: '2022-02-02T16:21:56.377'
+            amount: 117250
+            type: C
+            lastBalance: 1504958643
+            description: VA ARTHA GRAHA - AGOPYQ8P7PKCOZTT3
+            reference: AGOPYQ8P7PKCOZTT3
+          - registerDate: '2022-02-02T16:05:13.36'
+            amount: 116500
+            type: C
+            lastBalance: 1504841393
+            description: POS INDONESIA - A2Q2C1QJWFYVRNGOK
+            reference: A2Q2C1QJWFYVRNGOK
+          - registerDate: '2022-01-31T15:39:24.433'
+            amount: 11000
+            type: C
+            lastBalance: 1504724893
+            description: NOBU QR - 1010222013100000930260000404110
+            reference: '1010222013100000930260000404110'
+          - registerDate: '2022-01-31T15:29:51.807'
+            amount: 11000
+            type: C
+            lastBalance: 1504713893
+            description: NOBU QR - 1010222013100000930250000404109
+            reference: '1010222013100000930250000404109'
+          - registerDate: '2022-01-28T15:51:03.99'
+            amount: 120000
+            type: C
+            lastBalance: 1504702893
+            description: NOBU QR - 1643359714
+            reference: '1643359714'
+          - registerDate: '2022-01-28T13:43:52.277'
+            amount: 120000
+            type: C
+            lastBalance: 1504582893
+            description: NOBU QR - 101021907190000042236
+            reference: '101021907190000042236'
+          - registerDate: '2022-01-26T10:54:15.883'
+            amount: 120000
+            type: C
+            lastBalance: 1504462893
+            description: SAMPOERNA VA - S1LM35TJPMJFRJA1G
+            reference: S1LM35TJPMJFRJA1G
+          - registerDate: '2022-01-18T14:56:08.8'
+            amount: 15000
+            type: D
+            lastBalance: 1504342893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-18T14:56:08.253'
+            amount: 15000
+            type: D
+            lastBalance: 1504357893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-18T14:56:07.707'
+            amount: 15000
+            type: D
+            lastBalance: 1504372893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-17T14:03:28.823'
+            amount: 10000000
+            type: C
+            lastBalance: 1504387893
+            description: MANUAL DEPOSIT - MTWKLRYF1XBE2DLT1
+            reference: MTWKLRYF1XBE2DLT1
+          - registerDate: '2022-01-14T10:37:46.72'
+            amount: 15000
+            type: D
+            lastBalance: 1494387893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-14T10:37:46.47'
+            amount: 15000
+            type: D
+            lastBalance: 1494402893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-14T10:34:16.327'
+            amount: 15000
+            type: D
+            lastBalance: 1494417893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-14T10:34:16.077'
+            amount: 15000
+            type: D
+            lastBalance: 1494432893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-14T10:34:15.813'
+            amount: 15000
+            type: D
+            lastBalance: 1494447893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-14T10:30:19.733'
+            amount: 15000
+            type: D
+            lastBalance: 1494462893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-14T10:30:19.387'
+            amount: 15000
+            type: D
+            lastBalance: 1494477893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-14T10:29:06.247'
+            amount: 15000
+            type: D
+            lastBalance: 1494492893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-14T10:29:05.967'
+            amount: 15000
+            type: D
+            lastBalance: 1494507893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-14T10:16:25.46'
+            amount: 15000
+            type: D
+            lastBalance: 1494522893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-14T10:16:25.07'
+            amount: 15000
+            type: D
+            lastBalance: 1494537893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-14T09:15:18.237'
+            amount: 15000
+            type: D
+            lastBalance: 1494552893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-14T09:15:16.477'
+            amount: 15000
+            type: D
+            lastBalance: 1494567893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T13:28:51.31'
+            amount: 15000
+            type: D
+            lastBalance: 1494582893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T13:28:44.233'
+            amount: 15000
+            type: D
+            lastBalance: 1494597893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T13:28:02.733'
+            amount: 15000
+            type: D
+            lastBalance: 1494612893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T13:27:55.687'
+            amount: 15000
+            type: D
+            lastBalance: 1494627893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T13:27:16.363'
+            amount: 15000
+            type: D
+            lastBalance: 1494642893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T13:27:09.31'
+            amount: 15000
+            type: D
+            lastBalance: 1494657893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T13:26:33.987'
+            amount: 15000
+            type: D
+            lastBalance: 1494672893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T13:26:26.93'
+            amount: 15000
+            type: D
+            lastBalance: 1494687893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T13:23:58.023'
+            amount: 15000
+            type: D
+            lastBalance: 1494702893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T13:23:50.633'
+            amount: 15000
+            type: D
+            lastBalance: 1494717893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T13:12:15.393'
+            amount: 15000
+            type: D
+            lastBalance: 1494732893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T13:12:08.13'
+            amount: 15000
+            type: D
+            lastBalance: 1494747893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T13:08:32.733'
+            amount: 15000
+            type: D
+            lastBalance: 1494762893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T13:08:25.133'
+            amount: 15000
+            type: D
+            lastBalance: 1494777893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T13:06:55.653'
+            amount: 15000
+            type: D
+            lastBalance: 1494792893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T13:06:48.257'
+            amount: 15000
+            type: D
+            lastBalance: 1494807893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T12:37:31.217'
+            amount: 15000
+            type: D
+            lastBalance: 1494822893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T12:37:24.83'
+            amount: 15000
+            type: D
+            lastBalance: 1494837893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T12:36:28.133'
+            amount: 15000
+            type: D
+            lastBalance: 1494852893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T12:36:21.563'
+            amount: 15000
+            type: D
+            lastBalance: 1494867893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T12:09:15.047'
+            amount: 15000
+            type: D
+            lastBalance: 1494882893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T12:09:07.377'
+            amount: 15000
+            type: D
+            lastBalance: 1494897893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T11:57:52.653'
+            amount: 15000
+            type: D
+            lastBalance: 1494912893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T11:57:45.817'
+            amount: 15000
+            type: D
+            lastBalance: 1494927893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T11:51:15.173'
+            amount: 15000
+            type: D
+            lastBalance: 1494942893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T11:51:09.323'
+            amount: 15000
+            type: D
+            lastBalance: 1494957893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T11:48:22.563'
+            amount: 15000
+            type: D
+            lastBalance: 1494972893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T11:48:16.27'
+            amount: 15000
+            type: D
+            lastBalance: 1494987893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T11:46:55.72'
+            amount: 15000
+            type: D
+            lastBalance: 1495002893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T11:46:49.233'
+            amount: 15000
+            type: D
+            lastBalance: 1495017893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T10:33:43.633'
+            amount: 15000
+            type: D
+            lastBalance: 1495032893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T10:33:39.157'
+            amount: 15000
+            type: D
+            lastBalance: 1495047893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T10:28:11.193'
+            amount: 15000
+            type: D
+            lastBalance: 1495062893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-13T10:28:06.887'
+            amount: 15000
+            type: D
+            lastBalance: 1495077893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-12T16:43:32.427'
+            amount: 15000
+            type: D
+            lastBalance: 1495092893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-12T16:43:32.05'
+            amount: 15000
+            type: D
+            lastBalance: 1495107893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-12T16:25:07.913'
+            amount: 15000
+            type: D
+            lastBalance: 1495122893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-12T16:17:14.543'
+            amount: 15000
+            type: D
+            lastBalance: 1495137893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-12T15:59:58.427'
+            amount: 15000
+            type: D
+            lastBalance: 1495152893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-12T15:22:45.967'
+            amount: 15000
+            type: D
+            lastBalance: 1495167893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-12T15:22:35.727'
+            amount: 15000
+            type: D
+            lastBalance: 1495182893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-12T14:46:22.633'
+            amount: 15000
+            type: D
+            lastBalance: 1495197893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-12T14:46:13.99'
+            amount: 15000
+            type: D
+            lastBalance: 1495212893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-12T09:45:37.153'
+            amount: 13000
+            type: C
+            lastBalance: 1495227893
+            description: BRI VIRTUAL ACCOUNT - 221111201014430116
+            reference: '221111201014430116'
+          - registerDate: '2022-01-12T09:45:34.813'
+            amount: 13000
+            type: C
+            lastBalance: 1495214893
+            description: BRI VIRTUAL ACCOUNT - 221111201014426231
+            reference: '221111201014426231'
+          - registerDate: '2022-01-12T09:41:55.11'
+            amount: 13000
+            type: C
+            lastBalance: 1495201893
+            description: BRI VIRTUAL ACCOUNT - 221111201014422532
+            reference: '221111201014422532'
+          - registerDate: '2022-01-12T09:41:52.873'
+            amount: 13000
+            type: C
+            lastBalance: 1495188893
+            description: BRI VIRTUAL ACCOUNT - 221111201014415524
+            reference: '221111201014415524'
+          - registerDate: '2022-01-12T09:41:50.543'
+            amount: 13000
+            type: C
+            lastBalance: 1495175893
+            description: BRI VIRTUAL ACCOUNT - 221111201014412115
+            reference: '221111201014412115'
+          - registerDate: '2022-01-12T09:41:48.19'
+            amount: 12000
+            type: C
+            lastBalance: 1495162893
+            description: BRI VIRTUAL ACCOUNT - 221111201014403539
+            reference: '221111201014403539'
+          - registerDate: '2022-01-12T09:41:45.867'
+            amount: 12000
+            type: C
+            lastBalance: 1495150893
+            description: BRI VIRTUAL ACCOUNT - 221111201014402228
+            reference: '221111201014402228'
+          - registerDate: '2022-01-12T09:41:43.65'
+            amount: 12000
+            type: C
+            lastBalance: 1495138893
+            description: BRI VIRTUAL ACCOUNT - 221111201014396347
+            reference: '221111201014396347'
+          - registerDate: '2022-01-12T09:41:41.367'
+            amount: 12000
+            type: C
+            lastBalance: 1495126893
+            description: BRI VIRTUAL ACCOUNT - 221111201014392077
+            reference: '221111201014392077'
+          - registerDate: '2022-01-12T09:41:39.063'
+            amount: 12000
+            type: C
+            lastBalance: 1495114893
+            description: BRI VIRTUAL ACCOUNT - 221111201014387981
+            reference: '221111201014387981'
+          - registerDate: '2022-01-12T09:39:32.773'
+            amount: 11000
+            type: C
+            lastBalance: 1495102893
+            description: BRI VIRTUAL ACCOUNT - 221111201014382800
+            reference: '221111201014382800'
+          - registerDate: '2022-01-12T09:39:30.53'
+            amount: 11000
+            type: C
+            lastBalance: 1495091893
+            description: BRI VIRTUAL ACCOUNT - 221111201014379173
+            reference: '221111201014379173'
+          - registerDate: '2022-01-12T09:39:28.207'
+            amount: 11000
+            type: C
+            lastBalance: 1495080893
+            description: BRI VIRTUAL ACCOUNT - 221111201014374997
+            reference: '221111201014374997'
+          - registerDate: '2022-01-12T09:39:09.31'
+            amount: 11000
+            type: C
+            lastBalance: 1495069893
+            description: BRI VIRTUAL ACCOUNT - 221111201014369219
+            reference: '221111201014369219'
+          - registerDate: '2022-01-12T09:39:06.877'
+            amount: 11000
+            type: C
+            lastBalance: 1495058893
+            description: BRI VIRTUAL ACCOUNT - 221111201014368301
+            reference: '221111201014368301'
+          - registerDate: '2022-01-12T09:15:27.533'
+            amount: 76000
+            type: C
+            lastBalance: 1495047893
+            description: BRI VIRTUAL ACCOUNT - 221111201013645769
+            reference: '221111201013645769'
+          - registerDate: '2022-01-12T09:15:12.48'
+            amount: 76000
+            type: C
+            lastBalance: 1494971893
+            description: BRI VIRTUAL ACCOUNT - 221111202013638303
+            reference: '221111202013638303'
+          - registerDate: '2022-01-12T09:15:10.267'
+            amount: 76000
+            type: C
+            lastBalance: 1494895893
+            description: BRI VIRTUAL ACCOUNT - 221111203013621445
+            reference: '221111203013621445'
+          - registerDate: '2022-01-12T09:15:07.603'
+            amount: 76000
+            type: C
+            lastBalance: 1494819893
+            description: BRI VIRTUAL ACCOUNT - 221111204013608478
+            reference: '221111204013608478'
+          - registerDate: '2022-01-12T09:15:04.997'
+            amount: 76000
+            type: C
+            lastBalance: 1494743893
+            description: BRI VIRTUAL ACCOUNT - 221111205013595415
+            reference: '221111205013595415'
+          - registerDate: '2022-01-12T09:15:04.67'
+            amount: 76000
+            type: C
+            lastBalance: 1494667893
+            description: BRI VIRTUAL ACCOUNT - 221111205013595415
+            reference: '221111205013595415'
+          - registerDate: '2022-01-12T09:14:44.187'
+            amount: 50000
+            type: C
+            lastBalance: 1494591893
+            description: BRI VIRTUAL ACCOUNT - 221185816013578356
+            reference: '221185816013578356'
+          - registerDate: '2022-01-12T09:14:42.49'
+            amount: 50000
+            type: C
+            lastBalance: 1494541893
+            description: BRI VIRTUAL ACCOUNT - 221185816013578356
+            reference: '221185816013578356'
+          - registerDate: '2022-01-12T09:14:40.573'
+            amount: 50000
+            type: C
+            lastBalance: 1494491893
+            description: BRI VIRTUAL ACCOUNT - 221118838013563805
+            reference: '221118838013563805'
+          - registerDate: '2022-01-12T09:14:39.283'
+            amount: 50000
+            type: C
+            lastBalance: 1494441893
+            description: BRI VIRTUAL ACCOUNT - 221118838013563805
+            reference: '221118838013563805'
+          - registerDate: '2022-01-12T09:14:37.54'
+            amount: 50000
+            type: C
+            lastBalance: 1494391893
+            description: BRI VIRTUAL ACCOUNT - 221188370013548978
+            reference: '221188370013548978'
+          - registerDate: '2022-01-12T09:14:34.927'
+            amount: 50000
+            type: C
+            lastBalance: 1494341893
+            description: BRI VIRTUAL ACCOUNT - 221188370013548978
+            reference: '221188370013548978'
+          - registerDate: '2022-01-11T17:56:24.377'
+            amount: 15000
+            type: D
+            lastBalance: 1494291893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T17:56:16.113'
+            amount: 15000
+            type: D
+            lastBalance: 1494306893
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T17:40:21.113'
+            amount: 34000
+            type: C
+            lastBalance: 1494321893
+            description: BRI VIRTUAL ACCOUNT - 221011103017584062
+            reference: '221011103017584062'
+          - registerDate: '2022-01-11T17:35:08.177'
+            amount: 22500
+            type: C
+            lastBalance: 1494287893
+            description: BRI VIRTUAL ACCOUNT - 221011104017111832
+            reference: '221011104017111832'
+          - registerDate: '2022-01-11T17:35:07.727'
+            amount: 22400
+            type: C
+            lastBalance: 1494265393
+            description: BRI VIRTUAL ACCOUNT - 221011104017108368
+            reference: '221011104017108368'
+          - registerDate: '2022-01-11T17:35:07.26'
+            amount: 22300
+            type: C
+            lastBalance: 1494242993
+            description: BRI VIRTUAL ACCOUNT - 221011104017104468
+            reference: '221011104017104468'
+          - registerDate: '2022-01-11T17:35:06.813'
+            amount: 22200
+            type: C
+            lastBalance: 1494220693
+            description: BRI VIRTUAL ACCOUNT - 221011104017100270
+            reference: '221011104017100270'
+          - registerDate: '2022-01-11T17:35:06.367'
+            amount: 22100
+            type: C
+            lastBalance: 1494198493
+            description: BRI VIRTUAL ACCOUNT - 221011104017095635
+            reference: '221011104017095635'
+          - registerDate: '2022-01-11T17:35:05.893'
+            amount: 22000
+            type: C
+            lastBalance: 1494176393
+            description: BRI VIRTUAL ACCOUNT - 221011104017091827
+            reference: '221011104017091827'
+          - registerDate: '2022-01-11T17:35:05.423'
+            amount: 22000
+            type: C
+            lastBalance: 1494154393
+            description: BRI VIRTUAL ACCOUNT - 221011104017089904
+            reference: '221011104017089904'
+          - registerDate: '2022-01-11T17:28:39.73'
+            amount: 15000
+            type: D
+            lastBalance: 1494132393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T17:28:31.803'
+            amount: 15000
+            type: D
+            lastBalance: 1494147393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T17:26:04.55'
+            amount: 45000
+            type: C
+            lastBalance: 1494162393
+            description: BRI VIRTUAL ACCOUNT - 221011104016635236
+            reference: '221011104016635236'
+          - registerDate: '2022-01-11T17:16:02.843'
+            amount: 15000
+            type: D
+            lastBalance: 1494117393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T17:15:56.48'
+            amount: 15000
+            type: D
+            lastBalance: 1494132393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T17:15:50.117'
+            amount: 15000
+            type: D
+            lastBalance: 1494147393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T17:15:43.76'
+            amount: 15000
+            type: D
+            lastBalance: 1494162393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T17:15:37.127'
+            amount: 15000
+            type: D
+            lastBalance: 1494177393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T16:09:02.437'
+            amount: 50000
+            type: C
+            lastBalance: 1494192393
+            description: BRI VIRTUAL ACCOUNT - 221015596012059877
+            reference: '221015596012059877'
+          - registerDate: '2022-01-11T16:09:00.54'
+            amount: 50000
+            type: C
+            lastBalance: 1494142393
+            description: BRI VIRTUAL ACCOUNT - 221078300012030756
+            reference: '221078300012030756'
+          - registerDate: '2022-01-11T15:30:09'
+            amount: 15000
+            type: D
+            lastBalance: 1494092393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T15:30:05.13'
+            amount: 15000
+            type: D
+            lastBalance: 1494107393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T15:25:40.35'
+            amount: 15000
+            type: D
+            lastBalance: 1494122393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T15:25:34.21'
+            amount: 15000
+            type: D
+            lastBalance: 1494137393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T15:25:27.76'
+            amount: 15000
+            type: D
+            lastBalance: 1494152393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T15:22:53.31'
+            amount: 15000
+            type: D
+            lastBalance: 1494167393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T15:22:48.173'
+            amount: 15000
+            type: D
+            lastBalance: 1494182393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T14:00:51.583'
+            amount: 15000
+            type: D
+            lastBalance: 1494197393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T14:00:43.477'
+            amount: 15000
+            type: D
+            lastBalance: 1494212393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T13:41:24.59'
+            amount: 15000
+            type: D
+            lastBalance: 1494227393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T13:41:24.277'
+            amount: 15000
+            type: D
+            lastBalance: 1494242393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T12:04:35.26'
+            amount: 15000
+            type: D
+            lastBalance: 1494257393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T12:04:18.507'
+            amount: 15000
+            type: D
+            lastBalance: 1494272393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T11:57:00.213'
+            amount: 15000
+            type: D
+            lastBalance: 1494287393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T11:56:52.617'
+            amount: 15000
+            type: D
+            lastBalance: 1494302393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T10:00:24.333'
+            amount: 15000
+            type: D
+            lastBalance: 1494317393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T10:00:24.083'
+            amount: 15000
+            type: D
+            lastBalance: 1494332393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T09:30:02.6'
+            amount: 15000
+            type: D
+            lastBalance: 1494347393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T09:30:02.27'
+            amount: 15000
+            type: D
+            lastBalance: 1494362393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T09:07:34.283'
+            amount: 15000
+            type: D
+            lastBalance: 1494377393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-11T09:07:33.923'
+            amount: 15000
+            type: D
+            lastBalance: 1494392393
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-05T18:05:47.233'
+            amount: 13
+            type: C
+            lastBalance: 1494407393
+            description: OVO PAYMENT - OVH0WNYDM7G1IINLL
+            reference: OVH0WNYDM7G1IINLL
+          - registerDate: '2022-01-05T18:03:37.107'
+            amount: null
+            type: C
+            lastBalance: 1494407380
+            description: null
+            reference: null
+          - registerDate: '2022-01-05T17:44:51.927'
+            amount: null
+            type: C
+            lastBalance: 1494407367
+            description: null
+            reference: null
+          - registerDate: '2022-01-05T17:38:32.607'
+            amount: null
+            type: C
+            lastBalance: 1494407355
+            description: null
+            reference: null
+          - registerDate: '2022-01-05T13:22:39.87'
+            amount: 15000
+            type: D
+            lastBalance: 1494407342
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-05T13:22:39.497'
+            amount: 15000
+            type: D
+            lastBalance: 1494422342
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-05T11:17:28.583'
+            amount: 7110
+            type: D
+            lastBalance: 1494437342
+            description: void CC TEST BUG DESIGN
+            reference: void CC TEST BUG DESIGN
+          - registerDate: '2022-01-05T10:15:09.367'
+            amount: 10
+            type: C
+            lastBalance: 1494444452
+            description: OVO PAYMENT - OV3SW6PTDHXENKK0F
+            reference: OV3SW6PTDHXENKK0F
+          - registerDate: '2022-01-04T13:11:34.203'
+            amount: 16
+            type: D
+            lastBalance: 1494444442
+            description: 'VOID NEw '
+            reference: 'VOID NEw '
+          - registerDate: '2022-01-04T13:10:26.6'
+            amount: 16
+            type: C
+            lastBalance: 1494444458
+            description: OVO PAYMENT - OVRBRCW1JGW25ER4Z
+            reference: OVRBRCW1JGW25ER4Z
+          - registerDate: '2022-01-04T11:52:18.99'
+            amount: 14
+            type: C
+            lastBalance: 1494444442
+            description: OVO PAYMENT - OVH361RD7D0KHGVMD
+            reference: OVH361RD7D0KHGVMD
+          - registerDate: '2022-01-04T10:33:21.953'
+            amount: 12
+            type: D
+            lastBalance: 1494444428
+            description: TEST VOID
+            reference: TEST VOID
+          - registerDate: '2022-01-04T10:09:04.633'
+            amount: 12
+            type: C
+            lastBalance: 1494444440
+            description: OVO PAYMENT - OVIQJXLXP4II6UDOI
+            reference: OVIQJXLXP4II6UDOI
+          - registerDate: '2022-01-03T17:05:27.977'
+            amount: 14
+            type: C
+            lastBalance: 1494444428
+            description: OVO PAYMENT - OVPQUOQ1PICQDDZ1Q
+            reference: OVPQUOQ1PICQDDZ1Q
+          - registerDate: '2022-01-03T14:06:13.843'
+            amount: 13
+            type: D
+            lastBalance: 1494444414
+            description: Void From Api
+            reference: Void From Api
+          - registerDate: '2022-01-03T13:50:08.043'
+            amount: 13
+            type: C
+            lastBalance: 1494444427
+            description: OVO PAYMENT - OVWSIM8XUZX7ZMZVU
+            reference: OVWSIM8XUZX7ZMZVU
+          - registerDate: '2022-01-03T13:47:24.993'
+            amount: 17
+            type: C
+            lastBalance: 1494444414
+            description: OVO PAYMENT - OVKZ1QFQSX5OJFR2A
+            reference: OVKZ1QFQSX5OJFR2A
+          - registerDate: '2022-01-03T12:07:38.377'
+            amount: 17
+            type: C
+            lastBalance: 1494444397
+            description: OVO PAYMENT - OVCUZ8E2MGHNBPLOS
+            reference: OVCUZ8E2MGHNBPLOS
+          - registerDate: '2022-01-03T11:43:56.127'
+            amount: null
+            type: C
+            lastBalance: 1494444380
+            description: null
+            reference: null
+          - registerDate: '2022-01-03T11:42:43.607'
+            amount: 17
+            type: C
+            lastBalance: 1494444363
+            description: OVO PAYMENT - OV75KNLD5XKO3S0W1
+            reference: OV75KNLD5XKO3S0W1
+          - registerDate: '2022-01-03T11:25:31.96'
+            amount: 17
+            type: C
+            lastBalance: 1494444346
+            description: OVO PAYMENT - OVBHE3GJMH8QD0GMP
+            reference: OVBHE3GJMH8QD0GMP
+          - registerDate: '2022-01-03T11:18:12.447'
+            amount: 17
+            type: C
+            lastBalance: 1494444329
+            description: OVO PAYMENT - OVP4UCYLADAS0IY42
+            reference: OVP4UCYLADAS0IY42
+          - registerDate: '2022-01-03T10:36:05.487'
+            amount: 15000
+            type: D
+            lastBalance: 1494444312
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-03T10:35:13.103'
+            amount: 15000
+            type: D
+            lastBalance: 1494459312
+            description: Disbursement
+            reference: Done
+          - registerDate: '2022-01-03T10:32:02.73'
+            amount: 15000
+            type: D
+            lastBalance: 1494474312
+            description: Disbursement
+            reference: Done
+      items:
+        type: object
+        properties:
+          registerDate:
+            type: string
+            minLength: 1
+          amount:
+            type: number
+          type:
+            type: string
+            minLength: 1
+            description: |-
+              C => Credit (Money In)<br/>
+              D => Debit (Money Out)
+            enum:
+              - C
+              - D
+          lastBalance:
+            type: number
+          description:
+            type: string
+            minLength: 1
+          reference:
+            type: string
+            minLength: 1
+        required:
+          - registerDate
+          - amount
+          - type
+          - lastBalance
+          - description
+          - reference
+    MoneyIn:
+      type: array
+      description: ''
+      minItems: 1
+      uniqueItems: true
+      x-examples:
+        example-1:
+          - vaNumber: null
+            bankName: OVO PAYMENT
+            amount: 17
+            reference: OV75KNLD5XKO3S0W1
+            registerDate: '1/3/2022 11:42:34 AM'
+          - vaNumber: '88888992022011104'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 45000
+            reference: BRFMZ7Y4LLZPWUUQ8
+            registerDate: '1/11/2022 5:26:04 PM'
+          - vaNumber: '77777992022011103'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 34000
+            reference: BRNI2LT487LI2PEBF
+            registerDate: '1/11/2022 5:40:20 PM'
+          - vaNumber: '77777992022011202'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 76000
+            reference: BR5CIOK46C6DYCTAX
+            registerDate: '1/12/2022 9:15:12 AM'
+          - vaNumber: '88888992022011201'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 12000
+            reference: BR6CPK1OP86J4R5KO
+            registerDate: '1/12/2022 9:41:41 AM'
+          - vaNumber: '88888992022011201'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 13000
+            reference: BRGTGWCTEQPLZL0S0
+            registerDate: '1/12/2022 9:45:37 AM'
+          - vaNumber: '9005028499471985'
+            bankName: VA ARTHA GRAHA
+            amount: 120000
+            reference: AGOPYQ8P7PKCOZTT3
+            registerDate: '2/2/2022 4:21:39 PM'
+          - vaNumber: null
+            bankName: OVO PAYMENT
+            amount: 14
+            reference: OVPQUOQ1PICQDDZ1Q
+            registerDate: '1/3/2022 5:03:40 PM'
+          - vaNumber: '88888992022011104'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 22100
+            reference: BR0D1RDJG4F4CL6UM
+            registerDate: '1/11/2022 5:35:06 PM'
+          - vaNumber: '7777700394585816'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 50000
+            reference: BRZ4P6VZG3HDDQLZQ
+            registerDate: '1/12/2022 9:11:20 AM'
+          - vaNumber: '88888992022011201'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 11000
+            reference: BRC6YQGEDQFTJE2IK
+            registerDate: '1/12/2022 9:39:09 AM'
+          - vaNumber: '88888992022011201'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 12000
+            reference: BRB52VVSFIK7W2SXS
+            registerDate: '1/12/2022 9:41:48 AM'
+          - vaNumber: null
+            bankName: NOBU QR
+            amount: 120000
+            reference: NQDBVWQ8NBJV368V5
+            registerDate: '1/28/2022 12:59:29 PM'
+          - vaNumber: null
+            bankName: OVO PAYMENT
+            amount: 17
+            reference: OVBHE3GJMH8QD0GMP
+            registerDate: '1/3/2022 11:24:57 AM'
+          - vaNumber: '7777700810315596'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 50000
+            reference: BR324GZBX8RXPG4XM
+            registerDate: '1/11/2022 4:07:26 PM'
+          - vaNumber: '88888992022011104'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 22500
+            reference: BRSXPTGO446OY1DX4
+            registerDate: '1/11/2022 5:35:08 PM'
+          - vaNumber: '77777992022011203'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 76000
+            reference: BRC2O8MFRFH5DM0GU
+            registerDate: '1/12/2022 9:15:10 AM'
+          - vaNumber: '88888992022011201'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 12000
+            reference: BRM78FF632ACAFJ8V
+            registerDate: '1/12/2022 9:41:38 AM'
+          - vaNumber: '88888992022011201'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 13000
+            reference: BR5W6LE0ETJZJ10QT
+            registerDate: '1/12/2022 9:45:34 AM'
+          - vaNumber: '87816490694'
+            bankName: POS INDONESIA
+            amount: 120000
+            reference: A2Q2C1QJWFYVRNGOK
+            registerDate: '2/2/2022 4:04:44 PM'
+          - vaNumber: null
+            bankName: OVO PAYMENT
+            amount: 17
+            reference: OVP4UCYLADAS0IY42
+            registerDate: '1/3/2022 11:17:40 AM'
+          - vaNumber: '7777700496378300'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 50000
+            reference: BR3IXNGC4CQTLEGOB
+            registerDate: '1/11/2022 4:06:32 PM'
+          - vaNumber: '88888992022011104'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 22400
+            reference: BR85AWPIUL7PK1HYH
+            registerDate: '1/11/2022 5:35:07 PM'
+          - vaNumber: '77777992022011204'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 76000
+            reference: BRLZK5GBQW0YAFCWW
+            registerDate: '1/12/2022 9:15:07 AM'
+          - vaNumber: '88888992022011201'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 11000
+            reference: BRKSHD58ANNYOAJQU
+            registerDate: '1/12/2022 9:39:32 AM'
+          - vaNumber: '88888992022011201'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 13000
+            reference: BR3LAHU46PJBEML5O
+            registerDate: '1/12/2022 9:41:55 AM'
+          - vaNumber: null
+            bankName: NOBU QR
+            amount: 11000
+            reference: NQMVGQJDHEYW0BDH2
+            registerDate: '1/31/2022 3:35:28 PM'
+          - vaNumber: null
+            bankName: OVO PAYMENT
+            amount: 17
+            reference: OVKZ1QFQSX5OJFR2A
+            registerDate: '1/3/2022 11:43:50 AM'
+          - vaNumber: '88888992022011104'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 22000
+            reference: BR6WJ8NLLF01B2LUY
+            registerDate: '1/11/2022 5:35:05 PM'
+          - vaNumber: '7777700050488370'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 50000
+            reference: BRYT7QYPDRUCM4HUM
+            registerDate: '1/12/2022 9:10:26 AM'
+          - vaNumber: '77777992022011201'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 76000
+            reference: BRDGV8ZFLV3ITQBJQ
+            registerDate: '1/12/2022 9:15:27 AM'
+          - vaNumber: '88888992022011201'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 12000
+            reference: BRREDG0OTQDJKRBS6
+            registerDate: '1/12/2022 9:41:43 AM'
+          - vaNumber: null
+            bankName: MANUAL DEPOSIT
+            amount: 10000000
+            reference: MTWKLRYF1XBE2DLT1
+            registerDate: '1/17/2022 2:03:02 PM'
+          - vaNumber: '9005025668178633'
+            bankName: VA ARTHA GRAHA
+            amount: 120000
+            reference: AGSZ34DHNYH0RR763
+            registerDate: '2/2/2022 4:24:54 PM'
+          - vaNumber: null
+            bankName: OVO PAYMENT
+            amount: 13
+            reference: OVH0WNYDM7G1IINLL
+            registerDate: '1/5/2022 6:03:16 PM'
+          - vaNumber: '88888992022011104'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 22300
+            reference: BRT87GKWI18VQJ60A
+            registerDate: '1/11/2022 5:35:07 PM'
+          - vaNumber: '77777992022011205'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 76000
+            reference: BRJX1UZIIL85NGVUA
+            registerDate: '1/12/2022 9:15:03 AM'
+          - vaNumber: '88888992022011201'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 11000
+            reference: BRWILTFO0KL0OGLOX
+            registerDate: '1/12/2022 9:39:30 AM'
+          - vaNumber: '88888992022011201'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 13000
+            reference: BR41UHIE20NCLS3OF
+            registerDate: '1/12/2022 9:41:52 AM'
+          - vaNumber: null
+            bankName: NOBU QR
+            amount: 11000
+            reference: NQE13YXWW05WA1DTU
+            registerDate: '1/31/2022 3:26:48 PM'
+          - vaNumber: null
+            bankName: OVO PAYMENT
+            amount: 14
+            reference: OVH361RD7D0KHGVMD
+            registerDate: '1/4/2022 11:52:00 AM'
+          - vaNumber: '88888992022011104'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 22200
+            reference: BRXWPCX6OA85M84MR
+            registerDate: '1/11/2022 5:35:06 PM'
+          - vaNumber: null
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 76000
+            reference: BR6YEXR4KK2HBLRJC
+            registerDate: '1/12/2022 9:15:00 AM'
+          - vaNumber: '88888992022011201'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 11000
+            reference: BRZ6TBM6QBNJGFQKP
+            registerDate: '1/12/2022 9:39:28 AM'
+          - vaNumber: '88888992022011201'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 13000
+            reference: BRYNPU3C85NR54L2Y
+            registerDate: '1/12/2022 9:41:50 AM'
+          - vaNumber: null
+            bankName: NOBU QR
+            amount: 120000
+            reference: NQWY2XP5GIEZ5LUD6
+            registerDate: '1/28/2022 3:44:17 PM'
+          - vaNumber: null
+            bankName: OVO PAYMENT
+            amount: 17
+            reference: OVCUZ8E2MGHNBPLOS
+            registerDate: '1/3/2022 12:07:19 PM'
+          - vaNumber: '88888992022011104'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 22000
+            reference: BRF2DOO04LLOBHRCG
+            registerDate: '1/11/2022 5:35:05 PM'
+          - vaNumber: '7777700969018838'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 50000
+            reference: BRUH6MZSK08PHWVKS
+            registerDate: '1/12/2022 9:10:57 AM'
+          - vaNumber: '88888992022011201'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 11000
+            reference: BR2YHDF7ZKPBOBA01
+            registerDate: '1/12/2022 9:39:06 AM'
+          - vaNumber: '88888992022011201'
+            bankName: BRI VIRTUAL ACCOUNT
+            amount: 12000
+            reference: BRX0UNREAGIXGBUY3
+            registerDate: '1/12/2022 9:41:45 AM'
+          - vaNumber: '9030601124255226'
+            bankName: SAMPOERNA VA
+            amount: 120000
+            reference: S1LM35TJPMJFRJA1G
+            registerDate: '1/26/2022 10:53:46 AM'
+          - vaNumber: '87811137890'
+            bankName: POS INDONESIA
+            amount: 120000
+            reference: A28YKTZAPBG21CIBH
+            registerDate: '2/2/2022 4:25:27 PM'
+      items:
+        type: object
+        properties:
+          vaNumber:
+            type: string
+          bankName:
+            type: string
+            minLength: 1
+          amount:
+            type: number
+          reference:
+            type: string
+            minLength: 1
+          registerDate:
+            type: string
+            minLength: 1
+        required:
+          - vaNumber
+          - bankName
+          - amount
+          - reference
+          - registerDate
+    MoneyOut:
+      type: array
+      description: ''
+      minItems: 1
+      uniqueItems: true
+      items:
+        type: object
+        required:
+          - disburseId
+          - registerDate
+          - bankCode
+          - bankAccountNumber
+          - bankAccountName
+          - amount
+          - totalAmount
+          - feeAmount
+          - status
+        properties:
+          disburseId:
+            type: number
+          registerDate:
+            type: string
+            minLength: 1
+          bankCode:
+            type: string
+            minLength: 1
+          bankAccountNumber:
+            type: string
+            minLength: 1
+          bankAccountName:
+            type: string
+          amount:
+            type: number
+          totalAmount:
+            type: number
+          feeAmount:
+            type: number
+          status:
+            type: string
+            minLength: 1
+      x-examples:
+        example-1:
+          - disburseId: 662073
+            registerDate: '2020-12-04 17:04:27'
+            bankCode: '014'
+            bankAccountNumber: '5270186248'
+            bankAccountName: ''
+            amount: 10000
+            totalAmount: 14400
+            feeAmount: 4400
+            status: IF
+          - disburseId: 662074
+            registerDate: '2020-12-04 17:06:03'
+            bankCode: '014'
+            bankAccountNumber: '5270186248'
+            bankAccountName: ARIYANTO
+            amount: 10000
+            totalAmount: 14400
+            feeAmount: 4400
+            status: ID
+          - disburseId: 662075
+            registerDate: '2020-12-04 17:09:18'
+            bankCode: '014'
+            bankAccountNumber: '5270186248'
+            bankAccountName: ARIYANTO
+            amount: 10000
+            totalAmount: 14400
+            feeAmount: 4400
+            status: TP
+          - disburseId: 672069
+            registerDate: '2020-12-17 15:04:44'
+            bankCode: '014'
+            bankAccountNumber: '5270186248'
+            bankAccountName: ARIYANTO
+            amount: 10000
+            totalAmount: 14400
+            feeAmount: 4400
+            status: ID
+    MerchantDetail:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          id: 16473
+          email: email-test@yourbusiness.com
+          phoneNumber: '08123123123'
+          status: UNVERIFIED
+          businessInfo:
+            merchantType: 1
+            businessLocation: 1
+            businessTypeId: 1
+            nationality: 1
+            description: Your business description
+            brandName: Your business brand
+            website: your-business-website.com
+            businessAddress: Your business address
+            domicileAddress: Your domicile address
+            companyName: Your company name
+          picInfo:
+            identificationType: KTP
+            identificationNumber: '12345678123'
+            picName: Your pic name
+            picDob: '1/2/1990 12:00:00 AM'
+            picAddress: Your domicile address
+            picGender: 1
+          transactionProfile:
+            avgVolumePerDay: 0
+            avgVolumePerMonth: 0
+            avgNominalPerDay: 0
+            avgNominalPerMonth: 0
+          bankInfo:
+            bankCode: '014'
+            bankName: Your bank name
+            bankBranch: Your bank branch
+            bankAccountNumber: '12312321'
+            bankAccountName: Your bank account name
+            swiftCode: CXVV
+          customerServiceContactInfo:
+            mainPhoneNumber: '081231231231'
+            emergencyPhoneNumber: '085123123123'
+            email: cs-test@yourbusiness.com
+          technicalServiceContactInfo:
+            mainPhoneNumber: '085131123412'
+            emergencyPhoneNumber: '081456728908'
+            email: ts-test@yourbusiness.com
+          merchantBalance:
+            totalBalance: 0
+            effectiveBalance: 0
+          merchantVaNumber:
+            - bankName: MAYBANK VIRTUAL ACCOUNT
+              vaNumber: '7828700000016473'
+            - bankName: VA CIMB NIAGA
+              vaNumber: '1199000000016473'
+            - bankName: ATM BERSAMA
+              vaNumber: '5005250000016473'
+            - bankName: PERMATA VA
+              vaNumber: '8680000000016473'
+            - bankName: MANDIRI VA DEPOSIT
+              vaNumber: '8903980800016473'
+          disbursementKey: null
+      properties:
+        id:
+          type: number
+        email:
+          type: string
+          minLength: 1
+        phoneNumber:
+          type: string
+          minLength: 1
+        status:
+          type: string
+          minLength: 1
+          enum:
+            - ACTIVE
+            - BLOCKED
+            - PHONE_NOT_VERIFIED
+            - UNVERIFIED
+            - PROCESSING
+            - CLOSED
+            - REJECTED
+        businessInfo:
+          type: object
+          required:
+            - merchantType
+            - businessLocation
+            - businessTypeId
+            - nationality
+            - description
+            - brandName
+            - website
+            - businessAddress
+            - domicileAddress
+            - companyName
+          properties:
+            merchantType:
+              type: number
+              enum:
+                - 1
+                - 2
+              description: Merchant type consist of Personal (1) or Company (2)
+            businessLocation:
+              type: number
+              enum:
+                - 1
+                - 2
+              description: Business Location consist of Indonesia (1) or Overseas (2)
+            businessTypeId:
+              type: number
+            nationality:
+              type: number
+              enum:
+                - 1
+                - 2
+              description: Nationality consist of Indonesian (1) or Foreigner (2)
+            description:
+              type: string
+              minLength: 1
+            brandName:
+              type: string
+              minLength: 1
+            website:
+              type: string
+              minLength: 1
+            businessAddress:
+              type: string
+              minLength: 1
+            domicileAddress:
+              type: string
+              minLength: 1
+            companyName:
+              type: string
+              minLength: 1
+        picInfo:
+          type: object
+          required:
+            - identificationType
+            - identificationNumber
+            - picName
+            - picDob
+            - picAddress
+            - picGender
+          properties:
+            identificationType:
+              type: string
+              minLength: 1
+              enum:
+                - KTP
+                - PASPOR
+                - KITAS
+            identificationNumber:
+              type: string
+              minLength: 1
+            picName:
+              type: string
+              minLength: 1
+            picDob:
+              type: string
+              minLength: 1
+            picAddress:
+              type: string
+              minLength: 1
+            picGender:
+              type: number
+              enum:
+                - 0
+                - 1
+              description: 'PIC Gender (0 - Female, 1 - Male)'
+        transactionProfile:
+          type: object
+          required:
+            - avgVolumePerDay
+            - avgVolumePerMonth
+            - avgNominalPerDay
+            - avgNominalPerMonth
+          properties:
+            avgVolumePerDay:
+              type: number
+            avgVolumePerMonth:
+              type: number
+            avgNominalPerDay:
+              type: number
+            avgNominalPerMonth:
+              type: number
+        bankInfo:
+          type: object
+          required:
+            - bankCode
+            - bankName
+            - bankBranch
+            - bankAccountNumber
+            - bankAccountName
+            - swiftCode
+          properties:
+            bankCode:
+              type: string
+              minLength: 1
+            bankName:
+              type: string
+              minLength: 1
+            bankBranch:
+              type: string
+              minLength: 1
+            bankAccountNumber:
+              type: string
+              minLength: 1
+            bankAccountName:
+              type: string
+              minLength: 1
+            swiftCode:
+              type: string
+              minLength: 1
+        customerServiceContactInfo:
+          type: object
+          required:
+            - mainPhoneNumber
+            - emergencyPhoneNumber
+            - email
+          properties:
+            mainPhoneNumber:
+              type: string
+              minLength: 1
+            emergencyPhoneNumber:
+              type: string
+              minLength: 1
+            email:
+              type: string
+              minLength: 1
+        technicalServiceContactInfo:
+          type: object
+          required:
+            - mainPhoneNumber
+            - emergencyPhoneNumber
+            - email
+          properties:
+            mainPhoneNumber:
+              type: string
+              minLength: 1
+            emergencyPhoneNumber:
+              type: string
+              minLength: 1
+            email:
+              type: string
+              minLength: 1
+        merchantBalance:
+          type: object
+          required:
+            - totalBalance
+            - effectiveBalance
+          properties:
+            totalBalance:
+              type: number
+            effectiveBalance:
+              type: number
+        merchantVaNumber:
+          type: array
+          uniqueItems: true
+          minItems: 1
+          items:
+            type: object
+            properties:
+              bankName:
+                type: string
+                minLength: 1
+              vaNumber:
+                type: string
+                minLength: 1
+            required:
+              - bankName
+              - vaNumber
+        disbursementKey:
+          type: string
+          description: Merchant Key for disbursement (Money out)
+      required:
+        - id
+        - email
+        - phoneNumber
+        - status
+        - businessInfo
+        - picInfo
+        - transactionProfile
+        - bankInfo
+        - customerServiceContactInfo
+        - technicalServiceContactInfo
+        - merchantBalance
+        - merchantVaNumber
+        - disbursementKey
+    AllBusinessType:
+      type: array
+      description: ''
+      minItems: 1
+      uniqueItems: true
+      items:
+        type: object
+        required:
+          - id
+          - description
+        properties:
+          id:
+            type: number
+          description:
+            type: string
+            minLength: 1
+      x-examples:
+        example-1:
+          - id: 1
+            description: Koperasi Pertanian
+          - id: 2
+            description: Layanan Lansekap
+          - id: 3
+            description: Kontraktor Umum
+          - id: 4
+            description: Penerbitan dan Pencetakan Lain-lain
+          - id: 5
+            description: Spesialis Pembersihan
+          - id: 6
+            description: Kereta Api Penumpang
+          - id: 7
+            description: Taksi dan Limusin
+          - id: 8
+            description: Layanan Kurir
+          - id: 9
+            description: Kapal Pesiar
+          - id: 10
+            description: Agen Perjalanan dan Operasi Tur
+          - id: 11
+            description: Peralatan Telekomunikasi Termasuk Penjualan Telepon
+          - id: 12
+            description: Utilitas
+          - id: 13
+            description: Perabot Kantor dan Komersial
+          - id: 14
+            description: 'Peralatan Kantor, Fotografi, Fotokopi, dan Mikrofilm'
+          - id: 15
+            description: 'Komputer, Peralatan Periferal Komputer, Perangkat Lunak'
+          - id: 16
+            description: 'Medis, Kedokteran Mata, Peralatan dan Suplai Rumah Sakit'
+          - id: 17
+            description: Bagian dan Peralatan Listrik
+          - id: 18
+            description: 'Alat Tulis, Perlengkapan Kantor, Percetakan, dan Kertas Tulis'
+          - id: 19
+            description: Bahan Kimia dan Produk Terkait (Tidak Diklasifikasikan di Tempat Lain)
+          - id: 20
+            description: Minyak Bumi dan Produk Minyak Bumi
+          - id: 21
+            description: 'Buku, Majalah, dan Koran'
+          - id: 22
+            description: Toko Perangkat Keras
+          - id: 23
+            description: Toko Serba Ada
+          - id: 24
+            description: Barang Dagangan Umum dan Aksesori Lain-lain
+          - id: 25
+            description: Toko Grosir
+          - id: 26
+            description: Toko Roti
+          - id: 27
+            description: 'Suku Cadang Otomotif, Toko Aksesoris'
+          - id: 28
+            description: Dealer Sepeda Motor
+          - id: 29
+            description: Toko Alat Rumah Tangga
+          - id: 30
+            description: Toko Elektronik
+          - id: 31
+            description: 'Toko Musik, Alat Musik, Musik Piano Sheet'
+          - id: 32
+            description: Penyedia makanan
+          - id: 33
+            description: Restoran Cepat Saji
+          - id: 34
+            description: Toko Obat dan Apotik
+          - id: 35
+            description: Toko Barang Antik
+          - id: 36
+            description: Pegadaian
+          - id: 37
+            description: Toko Alat Olah Raga
+          - id: 38
+            description: 'Toko Arloji, Jam, Perhiasan, dan Perak'
+          - id: 39
+            description: 'Toko Hobi, Mainan, dan Game'
+          - id: 40
+            description: 'Toko Kartu, Toko Hadiah, Barang Baru, dan Toko Souvenir'
+          - id: 41
+            description: Toko Koper dan Barang Kulit
+          - id: 42
+            description: 'Toko Perlengkapan Menjahit, Jarum, Kain'
+          - id: 43
+            description: Toko Barang Kaca Kristal
+          - id: 44
+            description: Artis
+          - id: 45
+            description: Penjual dan Galeri Seni
+          - id: 46
+            description: Toko Kosmetik
+          - id: 47
+            description: Toko bunga
+          - id: 48
+            description: Dealer Berita dan Kios
+          - id: 49
+            description: 'Toko Hewan, Makanan Hewan, dan Toko Perlengkapan'
+          - id: 50
+            description: Institusi Keuangan
+          - id: 51
+            description: 'Lembaga Non-Keuangan, Wesel'
+          - id: 52
+            description: Asuransi
+          - id: 53
+            description: 'Penginapan - Hotel, Motel, Resor'
+          - id: 54
+            description: 'Layanan Pembersihan, dan Pakaian'
+          - id: 55
+            description: Layanan Pemakaman dan Krematorium
+          - id: 56
+            description: Layanan Pembelian / Belanja
+          - id: 57
+            description: Panti Pijat
+          - id: 58
+            description: Toko Kesehatan dan Kecantikan
+          - id: 59
+            description: Layanan Periklanan
+          - id: 60
+            description: Agen Pelaporan Kredit Konsumen
+          - id: 61
+            description: 'Fotografi Komersial, Seni, dan Grafik'
+          - id: 62
+            description: Pemrograman Komputer
+          - id: 63
+            description: Layanan Bisnis
+          - id: 64
+            description: Perusahaan Penyewaan Mobil
+          - id: 65
+            description: Toko Layanan Otomotif
+          - id: 66
+            description: Cuci Mobil
+          - id: 67
+            description: Bengkel Elektronik
+          - id: 68
+            description: Perbaikan Alat Kecil
+          - id: 69
+            description: 'Jam, dan Perbaikan Perhiasan'
+          - id: 70
+            description: 'Mebel, Perbaikan Mebel, dan Refinishing Mebel'
+          - id: 71
+            description: Pakaian Olahraga
+          - id: 72
+            description: 'Taman Hiburan, Karnaval'
+          - id: 73
+            description: Rumah sakit
+          - id: 74
+            description: Layanan Hukum dan Pengacara
+          - id: 75
+            description: Layanan Pendidikan
+          - id: 80
+            description: Lain lain
+          - id: 81
+            description: Layanan Kedokteran Hewan
+    AddMerchant:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          email: email-test@yourbusiness.com
+          phoneNumber: '08123123123'
+          businessInfo:
+            merchantType: 1
+            businessLocation: 1
+            businessTypeId: 1
+            nationality: 1
+            description: Your business description
+            brandName: Your business brand
+            website: your-business-website.com
+            businessAddress: Your business address
+            domicileAddress: Your domicile address
+            companyName: Your company name
+          picInfo:
+            identificationType: KTP
+            identificationNumber: '12345678123'
+            picName: Your pic name
+            picDob: '1990-01-02'
+            picAddress: Your pic address
+            picGender: 1
+          transactionProfile:
+            avgVolumePerDay: 0
+            avgVolumePerMonth: 0
+            avgNominalPerDay: 0
+            avgNominalPerMonth: 0
+          bankInfo:
+            bankCode: '014'
+            bankName: Your bank name
+            bankBranch: Your bank branch
+            bankAccountNumber: '12312321'
+            bankAccountName: Your bank account name
+            swiftCode: CXVV
+          customerServiceContactInfo:
+            mainPhoneNumber: '081231231231'
+            emergencyPhoneNumber: '085123123123'
+            email: cs-test@yourbusiness.com
+          technicalServiceContactInfo:
+            mainPhoneNumber: '085131123412'
+            emergencyPhoneNumber: '081456728908'
+            email: ts-test@yourbusiness.com
+      properties:
+        email:
+          type: string
+          minLength: 1
+        phoneNumber:
+          type: string
+          minLength: 1
+        businessInfo:
+          type: object
+          required:
+            - merchantType
+            - businessLocation
+            - businessTypeId
+            - nationality
+            - description
+            - brandName
+            - website
+            - businessAddress
+            - domicileAddress
+            - companyName
+          properties:
+            merchantType:
+              type: number
+              description: Merchant type consist of Personal (1) or Company (2)
+              enum:
+                - 1
+                - 2
+            businessLocation:
+              type: number
+              enum:
+                - 1
+                - 2
+              description: 'Business Location consist of 1 (Indonesia), 2 (Overseas)'
+            businessTypeId:
+              type: number
+            nationality:
+              type: number
+              enum:
+                - 1
+                - 2
+              description: 'Nationality consist of 1 (Indonesian), 2 (Foreigner)'
+            description:
+              type: string
+              minLength: 1
+            brandName:
+              type: string
+              minLength: 1
+            website:
+              type: string
+              minLength: 1
+            businessAddress:
+              type: string
+              minLength: 1
+            domicileAddress:
+              type: string
+              minLength: 1
+            companyName:
+              type: string
+              minLength: 1
+        picInfo:
+          type: object
+          required:
+            - identificationType
+            - identificationNumber
+            - picName
+            - picDob
+            - picAddress
+            - picGender
+          properties:
+            identificationType:
+              type: string
+              minLength: 1
+              enum:
+                - KTP
+                - PASPOR
+                - KITAS
+            identificationNumber:
+              type: string
+              minLength: 1
+            picName:
+              type: string
+              minLength: 1
+            picDob:
+              type: string
+              minLength: 1
+            picAddress:
+              type: string
+              minLength: 1
+            picGender:
+              type: number
+              enum:
+                - 0
+                - 1
+              description: 'PIC Gender (0 - Female, 1 - Male)'
+        transactionProfile:
+          type: object
+          required:
+            - avgVolumePerDay
+            - avgVolumePerMonth
+            - avgNominalPerDay
+            - avgNominalPerMonth
+          properties:
+            avgVolumePerDay:
+              type: number
+            avgVolumePerMonth:
+              type: number
+            avgNominalPerDay:
+              type: number
+            avgNominalPerMonth:
+              type: number
+        bankInfo:
+          type: object
+          required:
+            - bankCode
+            - bankName
+            - bankBranch
+            - bankAccountNumber
+            - bankAccountName
+            - swiftCode
+          properties:
+            bankCode:
+              type: string
+              minLength: 1
+            bankName:
+              type: string
+              minLength: 1
+            bankBranch:
+              type: string
+              minLength: 1
+            bankAccountNumber:
+              type: string
+              minLength: 1
+            bankAccountName:
+              type: string
+              minLength: 1
+            swiftCode:
+              type: string
+              minLength: 1
+        customerServiceContactInfo:
+          type: object
+          required:
+            - mainPhoneNumber
+            - emergencyPhoneNumber
+            - email
+          properties:
+            mainPhoneNumber:
+              type: string
+              minLength: 1
+            emergencyPhoneNumber:
+              type: string
+              minLength: 1
+            email:
+              type: string
+              minLength: 1
+        technicalServiceContactInfo:
+          type: object
+          required:
+            - mainPhoneNumber
+            - emergencyPhoneNumber
+            - email
+          properties:
+            mainPhoneNumber:
+              type: string
+              minLength: 1
+            emergencyPhoneNumber:
+              type: string
+              minLength: 1
+            email:
+              type: string
+              minLength: 1
+      required:
+        - email
+        - phoneNumber
+        - businessInfo
+        - picInfo
+        - transactionProfile
+        - bankInfo
+        - customerServiceContactInfo
+        - technicalServiceContactInfo
+    UpdateMerchant:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          email: email-test@yourbusiness.com
+          phoneNumber: '08123123123'
+          businessInfo:
+            merchantType: 1
+            businessLocation: 1
+            businessTypeId: 1
+            nationality: 1
+            description: Your business description
+            brandName: Your business brand
+            website: your-business-website.com
+            businessAddress: Your business address
+            domicileAddress: Your domicile address
+            companyName: Your company name
+          picInfo:
+            identificationType: KTP
+            identificationNumber: '12345678123'
+            picName: Your pic name
+            picDob: '1990-01-02'
+            picAddress: Your pic address
+            picGender: 1
+          transactionProfile:
+            avgVolumePerDay: 0
+            avgVolumePerMonth: 0
+            avgNominalPerDay: 0
+            avgNominalPerMonth: 0
+          bankInfo:
+            bankCode: '014'
+            bankName: Your bank name
+            bankBranch: Your bank branch
+            bankAccountNumber: '12312321'
+            bankAccountName: Your bank account name
+            swiftCode: CXVV
+          customerServiceContactInfo:
+            mainPhoneNumber: '081231231231'
+            emergencyPhoneNumber: '085123123123'
+            email: cs-test@yourbusiness.com
+          technicalServiceContactInfo:
+            mainPhoneNumber: '085131123412'
+            emergencyPhoneNumber: '081456728908'
+            email: ts-test@yourbusiness.com
+      properties:
+        email:
+          type: string
+          minLength: 1
+          default: your_registered_email
+        phoneNumber:
+          type: string
+          minLength: 1
+          default: your_registered_phonenumber
+        businessInfo:
+          type: object
+          required:
+            - merchantType
+            - businessLocation
+            - businessTypeId
+            - nationality
+            - description
+            - brandName
+            - website
+            - businessAddress
+            - domicileAddress
+            - companyName
+          properties:
+            merchantType:
+              type: number
+              enum:
+                - 1
+                - 2
+              description: Merchant type consist of Personal (1) or Company (2)
+            businessLocation:
+              type: number
+              enum:
+                - 1
+                - 2
+              description: 'Business Location consist of 1 (Indonesia), 2 (Overseas)'
+            businessTypeId:
+              type: number
+            nationality:
+              type: number
+              enum:
+                - 1
+                - 2
+              description: 'Nationality consist of 1 (Indonesian), 2 (Foreigner)'
+            description:
+              type: string
+              minLength: 1
+            brandName:
+              type: string
+              minLength: 1
+            website:
+              type: string
+              minLength: 1
+            businessAddress:
+              type: string
+              minLength: 1
+            domicileAddress:
+              type: string
+              minLength: 1
+            companyName:
+              type: string
+              minLength: 1
+        picInfo:
+          type: object
+          required:
+            - identificationType
+            - identificationNumber
+            - picName
+            - picDob
+            - picAddress
+            - picGender
+          properties:
+            identificationType:
+              type: string
+              minLength: 1
+              enum:
+                - KTP
+                - PASPOR
+                - KITAS
+            identificationNumber:
+              type: string
+              minLength: 1
+            picName:
+              type: string
+              minLength: 1
+            picDob:
+              type: string
+              minLength: 1
+            picAddress:
+              type: string
+              minLength: 1
+            picGender:
+              type: number
+              enum:
+                - 0
+                - 1
+              description: 'PIC Gender (0 - Female, 1 - Male)'
+        transactionProfile:
+          type: object
+          required:
+            - avgVolumePerDay
+            - avgVolumePerMonth
+            - avgNominalPerDay
+            - avgNominalPerMonth
+          properties:
+            avgVolumePerDay:
+              type: number
+            avgVolumePerMonth:
+              type: number
+            avgNominalPerDay:
+              type: number
+            avgNominalPerMonth:
+              type: number
+        bankInfo:
+          type: object
+          required:
+            - bankCode
+            - bankName
+            - bankBranch
+            - bankAccountNumber
+            - bankAccountName
+            - swiftCode
+          properties:
+            bankCode:
+              type: string
+              minLength: 1
+            bankName:
+              type: string
+              minLength: 1
+            bankBranch:
+              type: string
+              minLength: 1
+            bankAccountNumber:
+              type: string
+              minLength: 1
+            bankAccountName:
+              type: string
+              minLength: 1
+            swiftCode:
+              type: string
+              minLength: 1
+        customerServiceContactInfo:
+          type: object
+          required:
+            - mainPhoneNumber
+            - emergencyPhoneNumber
+            - email
+          properties:
+            mainPhoneNumber:
+              type: string
+              minLength: 1
+            emergencyPhoneNumber:
+              type: string
+              minLength: 1
+            email:
+              type: string
+              minLength: 1
+        technicalServiceContactInfo:
+          type: object
+          required:
+            - mainPhoneNumber
+            - emergencyPhoneNumber
+            - email
+          properties:
+            mainPhoneNumber:
+              type: string
+              minLength: 1
+            emergencyPhoneNumber:
+              type: string
+              minLength: 1
+            email:
+              type: string
+              minLength: 1
+      required:
+        - email
+        - phoneNumber
+        - businessInfo
+        - picInfo
+        - transactionProfile
+        - bankInfo
+        - customerServiceContactInfo
+        - technicalServiceContactInfo
+    AttachmentResponse:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          type: KTP
+          contentType: image/png
+          fileUrl: 'http://192.168.0.11:8888/Upload/test-attachment.png'
+      properties:
+        type:
+          type: string
+          minLength: 1
+        contentType:
+          type: string
+          minLength: 1
+          enum:
+            - KTP
+            - NPWP
+            - REKBANK
+            - WEBAPPSLOGO
+            - PASPOR
+            - KITAS
+          description: Type of the attachment
+        fileUrl:
+          type: string
+          minLength: 1
+      required:
+        - type
+        - contentType
+        - fileUrl
+    AttachmentRequest:
+      title: AttachmentRequest
+      type: object
+      properties:
+        fileName:
+          type: string
+        type:
+          type: string
+          enum:
+            - KTP
+            - NPWP
+            - REKBANK
+            - WEBAPPSLOGO
+            - PASPOR
+            - KITAS
+          example: KTP
+        file:
+          type: string
+          format: binary
+    Webhook(MoneyIn):
+      description: ''
+      type: object
+      properties:
+        merchantId:
+          type: string
+          minLength: 1
+        type:
+          type: string
+          minLength: 1
+        registerDate:
+          type: string
+          minLength: 1
+        vaNumber:
+          type: string
+          minLength: 1
+        amount:
+          type: number
+        reference:
+          type: string
+          minLength: 1
+      required:
+        - merchantId
+        - type
+        - registerDate
+        - vaNumber
+        - amount
+        - reference
+      x-examples:
+        example-1:
+          merchantId: '1'
+          type: money-in-notification
+          registerDate: '2022-02-02 16:24:54'
+          vaNumber: '9005025668178633'
+          amount: 120000
+          reference: D0001T2UHO4PUOKMFUS2
+  securitySchemes: {}
+  parameters:
+    merchantId:
+      name: merchantId
+      in: path
+      required: true
+      schema:
+        type: integer
+        example: 1
+      description: ID of Merchant
+    X-duitku-code:
+      name: X-duitku-code
+      in: header
+      required: true
+      schema:
+        type: string
+        example: DK
+      description: Duitku code is provided by Duitku.
+    X-duitku-timestamp:
+      name: X-duitku-timestamp
+      in: header
+      required: true
+      schema:
+        type: string
+        example: '1644808050'
+      description: X-duitku-timestamp is the timestamp of the request. It used UNIX Timestamp.
+    X-duitku-signature:
+      name: X-duitku-signature
+      in: header
+      required: true
+      schema:
+        type: string
+        example: a8a06344a34d02ff427783edaff7a0652225b2e93c5415f67ab2b9190c531923
+      description: 'The signature is required all request. Signature using hmac and sha256 with request method, relative path, time stamp, hash of entity body, API key and validation key as parameters.'
+    dateFrom:
+      name: dateFrom
+      in: query
+      required: true
+      schema:
+        type: string
+        format: date-time
+        example: '2022-01-01 09:39:37'
+      description: Start date value for filter transaction
+    dateTo:
+      name: dateTo
+      in: query
+      required: true
+      schema:
+        type: string
+        format: date-time
+        example: '2022-02-10 09:39:37'
+      description: End date value for filter transaction
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        text/plain:
+          schema:
+            title: Error
+            description: A standard error object.
+            x-tags:
+              - Common
+            type: string
+          examples:
+            example-1:
+              value: Merchant not found
+    Unauthorized:
+      description: Action not allowed
+      content:
+        text/plain:
+          schema:
+            type: string
+          examples:
+            example-1:
+              value: Forbidden access
+    ServerError:
+      description: Internal Server Error
+      content:
+        text/plain:
+          schema:
+            type: string
+          examples:
+            example-1:
+              value: Please try again later
+  examples: {}
+  requestBodies: {}
