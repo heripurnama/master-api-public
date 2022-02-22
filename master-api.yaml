@@ -1738,9 +1738,6 @@ components:
             mainPhoneNumber: '085131123412'
             emergencyPhoneNumber: '081456728908'
             email: ts-test@yourbusiness.com
-          merchantBalance:
-            totalBalance: 0
-            effectiveBalance: 0
           merchantVaNumber:
             - bankName: MAYBANK VIRTUAL ACCOUNT
               vaNumber: '7828700000016473'
@@ -1936,16 +1933,6 @@ components:
             email:
               type: string
               minLength: 1
-        merchantBalance:
-          type: object
-          required:
-            - totalBalance
-            - effectiveBalance
-          properties:
-            totalBalance:
-              type: number
-            effectiveBalance:
-              type: number
         merchantVaNumber:
           type: array
           uniqueItems: true
@@ -1976,7 +1963,6 @@ components:
         - bankInfo
         - customerServiceContactInfo
         - technicalServiceContactInfo
-        - merchantBalance
         - merchantVaNumber
         - disbursementKey
     AllBusinessType:
