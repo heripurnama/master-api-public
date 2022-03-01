@@ -2639,6 +2639,14 @@ components:
     Webhook(MoneyIn):
       description: ''
       type: object
+      x-examples:
+        example-1:
+          merchantId: '1'
+          type: money-in-notification
+          registerDate: '2022-02-02 16:24:54'
+          vaNumber: '9005025668178633'
+          amount: 120000
+          publisherOrderId: D0001T2UHO4PUOKMFUS2
       properties:
         merchantId:
           type: string
@@ -2654,24 +2662,17 @@ components:
           minLength: 1
         amount:
           type: number
-        reference:
+        publisherOrderId:
           type: string
           minLength: 1
+          description: 'Need to change key name from reference to publisherOrderId, for our internal needs.'
       required:
         - merchantId
         - type
         - registerDate
         - vaNumber
         - amount
-        - reference
-      x-examples:
-        example-1:
-          merchantId: '1'
-          type: money-in-notification
-          registerDate: '2022-02-02 16:24:54'
-          vaNumber: '9005025668178633'
-          amount: 120000
-          reference: D0001T2UHO4PUOKMFUS2
+        - publisherOrderId
   securitySchemes: {}
   parameters:
     merchantId:
