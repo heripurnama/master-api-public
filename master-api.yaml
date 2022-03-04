@@ -1739,16 +1739,12 @@ components:
             emergencyPhoneNumber: '081456728908'
             email: ts-test@yourbusiness.com
           merchantVaNumber:
-            - bankName: MAYBANK VIRTUAL ACCOUNT
-              vaNumber: '7828700000016473'
-            - bankName: VA CIMB NIAGA
-              vaNumber: '1199000000016473'
-            - bankName: ATM BERSAMA
-              vaNumber: '5005250000016473'
-            - bankName: PERMATA VA
-              vaNumber: '8680000000016473'
-            - bankName: MANDIRI VA DEPOSIT
-              vaNumber: '8903980800016473'
+            - bankCode: '016'
+              bankName: Maybank
+              vaNumber: '7828700000000001'
+            - bankCode: '013'
+              bankName: Permata Bank
+              vaNumber: '8680000000000001'
           disbursementKey: null
       properties:
         id:
@@ -1940,6 +1936,9 @@ components:
           items:
             type: object
             properties:
+              bankCode:
+                type: string
+                minLength: 1
               bankName:
                 type: string
                 minLength: 1
