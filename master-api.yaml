@@ -249,6 +249,94 @@ paths:
         <b>Note</b>
         - For the base url adjust to the base url of the website you are using.
         - For the string path used for checking signature, especially on webhooks using full path. <br/> Example : `https://your-business-website.com/api/callback`
+  '/history/{merchantId}/moneyin/internaltransfer':
+    parameters:
+      - $ref: '#/components/parameters/merchantId'
+    get:
+      summary: Money In - Internal Transfer
+      tags:
+        - History
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MoneyIn-TransferInternal'
+      operationId: get-history-merchantId-moneyin-internaltransfer
+      parameters:
+        - $ref: '#/components/parameters/X-duitku-code'
+        - $ref: '#/components/parameters/X-duitku-timestamp'
+        - $ref: '#/components/parameters/X-duitku-signature'
+        - $ref: '#/components/parameters/dateFrom'
+        - $ref: '#/components/parameters/dateTo'
+  '/history/{merchantId}/moneyout/internaltransfer':
+    parameters:
+      - $ref: '#/components/parameters/merchantId'
+    get:
+      summary: Money Out - Internal Transfer
+      tags:
+        - History
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MoneyOut-TransferInternal'
+      operationId: get-history-merchantId-moneyout-internaltransfer
+      parameters:
+        - $ref: '#/components/parameters/X-duitku-code'
+        - $ref: '#/components/parameters/X-duitku-timestamp'
+        - $ref: '#/components/parameters/X-duitku-signature'
+        - $ref: '#/components/parameters/dateFrom'
+        - $ref: '#/components/parameters/dateTo'
+      description: ''
+  /merchant/internaltransfer:
+    post:
+      summary: Merchant - Internal Transfer
+      operationId: post-merchant-internaltransfer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalTransferResponse'
+        '400':
+          description: |
+            - responseCode : 03 [ Source Merchant not found || Destination Merchant not found || Data Merchant not found ]
+            - responseCode : 51 : [ Your balance is not enough to make a transfer with the given amount ]
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  responseCode:
+                    type: string
+                    minLength: 1
+                  responseMessage:
+                    type: string
+                    minLength: 1
+                required:
+                  - responseCode
+                  - responseMessage
+                x-examples:
+                  example-1:
+                    responseCode: '03'
+                    responseMessage: Source Merchant not found
+      tags:
+        - Merchant
+      parameters:
+        - $ref: '#/components/parameters/X-duitku-code'
+        - $ref: '#/components/parameters/X-duitku-timestamp'
+        - $ref: '#/components/parameters/X-duitku-signature'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternalTransfer'
 components:
   schemas:
     Balance:
@@ -2672,6 +2760,196 @@ components:
         - vaNumber
         - amount
         - publisherOrderId
+    MoneyIn-TransferInternal:
+      type: array
+      description: ''
+      minItems: 1
+      uniqueItems: true
+      x-examples:
+        example-1:
+          - transactionId: 1810601
+            transferFromId: 17477
+            transferFrom: rivaldimaulana@gmail.com
+            amount: 10000
+            description: null
+            transactionDate: '2022-03-09 11:43:39'
+          - transactionId: 1810599
+            transferFromId: 17477
+            transferFrom: rivaldimaulana@gmail.com
+            amount: 10000
+            description: null
+            transactionDate: '2022-03-09 11:40:59'
+          - transactionId: 1810598
+            transferFromId: 17477
+            transferFrom: rivaldimaulana@gmail.com
+            amount: 10000
+            description: null
+            transactionDate: '2022-03-09 11:40:03'
+      items:
+        type: object
+        properties:
+          transactionId:
+            type: number
+          transferFromId:
+            type: number
+          transferFrom:
+            type: string
+            minLength: 1
+          amount:
+            type: number
+          description:
+            type: string
+          transactionDate:
+            type: string
+            minLength: 1
+        required:
+          - transactionId
+          - transferFromId
+          - transferFrom
+          - amount
+          - transactionDate
+    MoneyOut-TransferInternal:
+      type: array
+      description: ''
+      minItems: 1
+      uniqueItems: true
+      items:
+        type: object
+        required:
+          - transactionId
+          - transferToId
+          - transferTo
+          - amount
+          - description
+          - transactionDate
+        properties:
+          transactionId:
+            type: number
+          transferToId:
+            type: number
+          transferTo:
+            type: string
+            minLength: 1
+          amount:
+            type: number
+          description:
+            type: string
+            minLength: 1
+          transactionDate:
+            type: string
+            minLength: 1
+      x-examples:
+        example-1:
+          - transactionId: 1820605
+            transferToId: 17478
+            transferTo: rivaldimaulana02@gmail.com
+            amount: 230000
+            description: Bonus Test
+            transactionDate: '2022-03-14 16:24:16'
+          - transactionId: 1820604
+            transferToId: 17478
+            transferTo: rivaldimaulana02@gmail.com
+            amount: 230000
+            description: Bonus
+            transactionDate: '2022-03-14 16:11:58'
+          - transactionId: 1820603
+            transferToId: 17478
+            transferTo: rivaldimaulana02@gmail.com
+            amount: 230000
+            description: Bonus
+            transactionDate: '2022-03-14 11:26:12'
+          - transactionId: 1820602
+            transferToId: 17478
+            transferTo: rivaldimaulana02@gmail.com
+            amount: 230000
+            description: Bonus
+            transactionDate: '2022-03-14 10:46:31'
+          - transactionId: 1810606
+            transferToId: 17478
+            transferTo: rivaldimaulana02@gmail.com
+            amount: 230000
+            description: Bonus
+            transactionDate: '2022-03-10 14:01:09'
+          - transactionId: 1810601
+            transferToId: 17478
+            transferTo: rivaldimaulana02@gmail.com
+            amount: 10000
+            description: null
+            transactionDate: '2022-03-09 11:43:39'
+          - transactionId: 1810599
+            transferToId: 17478
+            transferTo: rivaldimaulana02@gmail.com
+            amount: 10000
+            description: null
+            transactionDate: '2022-03-09 11:40:59'
+          - transactionId: 1810598
+            transferToId: 17478
+            transferTo: rivaldimaulana02@gmail.com
+            amount: 10000
+            description: null
+            transactionDate: '2022-03-09 11:40:03'
+    InternalTransfer:
+      description: ''
+      type: object
+      properties:
+        sourceMerchantId:
+          type: number
+        destinationId:
+          type: number
+        amount:
+          type: number
+        description:
+          type: string
+          minLength: 1
+      required:
+        - sourceMerchantId
+        - destinationId
+        - amount
+        - description
+      x-examples:
+        example-1:
+          sourceMerchantId: 17477
+          destinationId: 17478
+          amount: 10000
+          description: Bonus Test
+    InternalTransferResponse:
+      description: ''
+      type: object
+      properties:
+        sourceMerchantId:
+          type: number
+        destinationId:
+          type: number
+        amount:
+          type: number
+        description:
+          type: string
+          minLength: 1
+        transactionId:
+          type: number
+        responseCode:
+          type: string
+          minLength: 1
+        responseMessage:
+          type: string
+          minLength: 1
+      required:
+        - sourceMerchantId
+        - destinationId
+        - amount
+        - description
+        - transactionId
+        - responseCode
+        - responseMessage
+      x-examples:
+        example-1:
+          sourceMerchantId: 17477
+          destinationId: 17478
+          amount: 230000
+          description: Bonus Test
+          transactionId: 1820605
+          responseCode: '00'
+          responseMessage: SUCCESS
   securitySchemes: {}
   parameters:
     merchantId:
