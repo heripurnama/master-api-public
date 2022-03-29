@@ -67,10 +67,10 @@ paths:
                   value:
                     - registerDate: string
                       amount: 0
-                      type: C
+                      type: string
                       lastBalance: 0
                       description: string
-                      reference: string
+                      transactionId: 0
       operationId: get-balance-merchantId-history
       parameters:
         - $ref: '#/components/parameters/dateFrom'
@@ -245,6 +245,11 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Webhook(MoneyIn)'
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+        description: ''
       description: |-
         <b>Note</b>
         - For the base url adjust to the base url of the website you are using.
@@ -359,1024 +364,15 @@ components:
       description: ''
       minItems: 1
       uniqueItems: true
-      x-examples:
-        example-1:
-          - registerDate: '2022-02-09T09:39:37.303'
-            amount: 9500
-            type: C
-            lastBalance: 1505462393
-            description: PERMATA VA - BTPYD4YXO7NS1M7YC
-            reference: BTPYD4YXO7NS1M7YC
-          - registerDate: '2022-02-08T17:47:06.22'
-            amount: 9500
-            type: C
-            lastBalance: 1505452893
-            description: PERMATA VA - BT0WECK5XZZIBNRKI
-            reference: BT0WECK5XZZIBNRKI
-          - registerDate: '2022-02-08T11:10:08.827'
-            amount: 120000
-            type: C
-            lastBalance: 1505443393
-            description: NOBU QR - 1644293360
-            reference: '1644293360'
-          - registerDate: '2022-02-08T11:03:56.413'
-            amount: 120000
-            type: C
-            lastBalance: 1505323393
-            description: NOBU QR - 1644292988
-            reference: '1644292988'
-          - registerDate: '2022-02-03T16:35:05.99'
-            amount: 11000
-            type: C
-            lastBalance: 1505203393
-            description: NOBU QR - 1643866208
-            reference: '1643866208'
-          - registerDate: '2022-02-02T18:57:53.437'
-            amount: 12000
-            type: D
-            lastBalance: 1505192393
-            description: TEST VOID NOBU
-            reference: TEST VOID NOBU
-          - registerDate: '2022-02-02T16:58:24.3'
-            amount: 12000
-            type: C
-            lastBalance: 1505204393
-            description: NOBU QR - 1643795046
-            reference: '1643795046'
-          - registerDate: '2022-02-02T16:25:48.737'
-            amount: 116500
-            type: C
-            lastBalance: 1505192393
-            description: POS INDONESIA - A28YKTZAPBG21CIBH
-            reference: A28YKTZAPBG21CIBH
-          - registerDate: '2022-02-02T16:25:08.72'
-            amount: 117250
-            type: C
-            lastBalance: 1505075893
-            description: VA ARTHA GRAHA - AGSZ34DHNYH0RR763
-            reference: AGSZ34DHNYH0RR763
-          - registerDate: '2022-02-02T16:21:56.377'
-            amount: 117250
-            type: C
-            lastBalance: 1504958643
-            description: VA ARTHA GRAHA - AGOPYQ8P7PKCOZTT3
-            reference: AGOPYQ8P7PKCOZTT3
-          - registerDate: '2022-02-02T16:05:13.36'
-            amount: 116500
-            type: C
-            lastBalance: 1504841393
-            description: POS INDONESIA - A2Q2C1QJWFYVRNGOK
-            reference: A2Q2C1QJWFYVRNGOK
-          - registerDate: '2022-01-31T15:39:24.433'
-            amount: 11000
-            type: C
-            lastBalance: 1504724893
-            description: NOBU QR - 1010222013100000930260000404110
-            reference: '1010222013100000930260000404110'
-          - registerDate: '2022-01-31T15:29:51.807'
-            amount: 11000
-            type: C
-            lastBalance: 1504713893
-            description: NOBU QR - 1010222013100000930250000404109
-            reference: '1010222013100000930250000404109'
-          - registerDate: '2022-01-28T15:51:03.99'
-            amount: 120000
-            type: C
-            lastBalance: 1504702893
-            description: NOBU QR - 1643359714
-            reference: '1643359714'
-          - registerDate: '2022-01-28T13:43:52.277'
-            amount: 120000
-            type: C
-            lastBalance: 1504582893
-            description: NOBU QR - 101021907190000042236
-            reference: '101021907190000042236'
-          - registerDate: '2022-01-26T10:54:15.883'
-            amount: 120000
-            type: C
-            lastBalance: 1504462893
-            description: SAMPOERNA VA - S1LM35TJPMJFRJA1G
-            reference: S1LM35TJPMJFRJA1G
-          - registerDate: '2022-01-18T14:56:08.8'
-            amount: 15000
-            type: D
-            lastBalance: 1504342893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-18T14:56:08.253'
-            amount: 15000
-            type: D
-            lastBalance: 1504357893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-18T14:56:07.707'
-            amount: 15000
-            type: D
-            lastBalance: 1504372893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-17T14:03:28.823'
-            amount: 10000000
-            type: C
-            lastBalance: 1504387893
-            description: MANUAL DEPOSIT - MTWKLRYF1XBE2DLT1
-            reference: MTWKLRYF1XBE2DLT1
-          - registerDate: '2022-01-14T10:37:46.72'
-            amount: 15000
-            type: D
-            lastBalance: 1494387893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-14T10:37:46.47'
-            amount: 15000
-            type: D
-            lastBalance: 1494402893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-14T10:34:16.327'
-            amount: 15000
-            type: D
-            lastBalance: 1494417893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-14T10:34:16.077'
-            amount: 15000
-            type: D
-            lastBalance: 1494432893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-14T10:34:15.813'
-            amount: 15000
-            type: D
-            lastBalance: 1494447893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-14T10:30:19.733'
-            amount: 15000
-            type: D
-            lastBalance: 1494462893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-14T10:30:19.387'
-            amount: 15000
-            type: D
-            lastBalance: 1494477893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-14T10:29:06.247'
-            amount: 15000
-            type: D
-            lastBalance: 1494492893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-14T10:29:05.967'
-            amount: 15000
-            type: D
-            lastBalance: 1494507893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-14T10:16:25.46'
-            amount: 15000
-            type: D
-            lastBalance: 1494522893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-14T10:16:25.07'
-            amount: 15000
-            type: D
-            lastBalance: 1494537893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-14T09:15:18.237'
-            amount: 15000
-            type: D
-            lastBalance: 1494552893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-14T09:15:16.477'
-            amount: 15000
-            type: D
-            lastBalance: 1494567893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T13:28:51.31'
-            amount: 15000
-            type: D
-            lastBalance: 1494582893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T13:28:44.233'
-            amount: 15000
-            type: D
-            lastBalance: 1494597893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T13:28:02.733'
-            amount: 15000
-            type: D
-            lastBalance: 1494612893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T13:27:55.687'
-            amount: 15000
-            type: D
-            lastBalance: 1494627893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T13:27:16.363'
-            amount: 15000
-            type: D
-            lastBalance: 1494642893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T13:27:09.31'
-            amount: 15000
-            type: D
-            lastBalance: 1494657893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T13:26:33.987'
-            amount: 15000
-            type: D
-            lastBalance: 1494672893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T13:26:26.93'
-            amount: 15000
-            type: D
-            lastBalance: 1494687893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T13:23:58.023'
-            amount: 15000
-            type: D
-            lastBalance: 1494702893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T13:23:50.633'
-            amount: 15000
-            type: D
-            lastBalance: 1494717893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T13:12:15.393'
-            amount: 15000
-            type: D
-            lastBalance: 1494732893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T13:12:08.13'
-            amount: 15000
-            type: D
-            lastBalance: 1494747893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T13:08:32.733'
-            amount: 15000
-            type: D
-            lastBalance: 1494762893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T13:08:25.133'
-            amount: 15000
-            type: D
-            lastBalance: 1494777893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T13:06:55.653'
-            amount: 15000
-            type: D
-            lastBalance: 1494792893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T13:06:48.257'
-            amount: 15000
-            type: D
-            lastBalance: 1494807893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T12:37:31.217'
-            amount: 15000
-            type: D
-            lastBalance: 1494822893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T12:37:24.83'
-            amount: 15000
-            type: D
-            lastBalance: 1494837893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T12:36:28.133'
-            amount: 15000
-            type: D
-            lastBalance: 1494852893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T12:36:21.563'
-            amount: 15000
-            type: D
-            lastBalance: 1494867893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T12:09:15.047'
-            amount: 15000
-            type: D
-            lastBalance: 1494882893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T12:09:07.377'
-            amount: 15000
-            type: D
-            lastBalance: 1494897893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T11:57:52.653'
-            amount: 15000
-            type: D
-            lastBalance: 1494912893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T11:57:45.817'
-            amount: 15000
-            type: D
-            lastBalance: 1494927893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T11:51:15.173'
-            amount: 15000
-            type: D
-            lastBalance: 1494942893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T11:51:09.323'
-            amount: 15000
-            type: D
-            lastBalance: 1494957893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T11:48:22.563'
-            amount: 15000
-            type: D
-            lastBalance: 1494972893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T11:48:16.27'
-            amount: 15000
-            type: D
-            lastBalance: 1494987893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T11:46:55.72'
-            amount: 15000
-            type: D
-            lastBalance: 1495002893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T11:46:49.233'
-            amount: 15000
-            type: D
-            lastBalance: 1495017893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T10:33:43.633'
-            amount: 15000
-            type: D
-            lastBalance: 1495032893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T10:33:39.157'
-            amount: 15000
-            type: D
-            lastBalance: 1495047893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T10:28:11.193'
-            amount: 15000
-            type: D
-            lastBalance: 1495062893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-13T10:28:06.887'
-            amount: 15000
-            type: D
-            lastBalance: 1495077893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-12T16:43:32.427'
-            amount: 15000
-            type: D
-            lastBalance: 1495092893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-12T16:43:32.05'
-            amount: 15000
-            type: D
-            lastBalance: 1495107893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-12T16:25:07.913'
-            amount: 15000
-            type: D
-            lastBalance: 1495122893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-12T16:17:14.543'
-            amount: 15000
-            type: D
-            lastBalance: 1495137893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-12T15:59:58.427'
-            amount: 15000
-            type: D
-            lastBalance: 1495152893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-12T15:22:45.967'
-            amount: 15000
-            type: D
-            lastBalance: 1495167893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-12T15:22:35.727'
-            amount: 15000
-            type: D
-            lastBalance: 1495182893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-12T14:46:22.633'
-            amount: 15000
-            type: D
-            lastBalance: 1495197893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-12T14:46:13.99'
-            amount: 15000
-            type: D
-            lastBalance: 1495212893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-12T09:45:37.153'
-            amount: 13000
-            type: C
-            lastBalance: 1495227893
-            description: BRI VIRTUAL ACCOUNT - 221111201014430116
-            reference: '221111201014430116'
-          - registerDate: '2022-01-12T09:45:34.813'
-            amount: 13000
-            type: C
-            lastBalance: 1495214893
-            description: BRI VIRTUAL ACCOUNT - 221111201014426231
-            reference: '221111201014426231'
-          - registerDate: '2022-01-12T09:41:55.11'
-            amount: 13000
-            type: C
-            lastBalance: 1495201893
-            description: BRI VIRTUAL ACCOUNT - 221111201014422532
-            reference: '221111201014422532'
-          - registerDate: '2022-01-12T09:41:52.873'
-            amount: 13000
-            type: C
-            lastBalance: 1495188893
-            description: BRI VIRTUAL ACCOUNT - 221111201014415524
-            reference: '221111201014415524'
-          - registerDate: '2022-01-12T09:41:50.543'
-            amount: 13000
-            type: C
-            lastBalance: 1495175893
-            description: BRI VIRTUAL ACCOUNT - 221111201014412115
-            reference: '221111201014412115'
-          - registerDate: '2022-01-12T09:41:48.19'
-            amount: 12000
-            type: C
-            lastBalance: 1495162893
-            description: BRI VIRTUAL ACCOUNT - 221111201014403539
-            reference: '221111201014403539'
-          - registerDate: '2022-01-12T09:41:45.867'
-            amount: 12000
-            type: C
-            lastBalance: 1495150893
-            description: BRI VIRTUAL ACCOUNT - 221111201014402228
-            reference: '221111201014402228'
-          - registerDate: '2022-01-12T09:41:43.65'
-            amount: 12000
-            type: C
-            lastBalance: 1495138893
-            description: BRI VIRTUAL ACCOUNT - 221111201014396347
-            reference: '221111201014396347'
-          - registerDate: '2022-01-12T09:41:41.367'
-            amount: 12000
-            type: C
-            lastBalance: 1495126893
-            description: BRI VIRTUAL ACCOUNT - 221111201014392077
-            reference: '221111201014392077'
-          - registerDate: '2022-01-12T09:41:39.063'
-            amount: 12000
-            type: C
-            lastBalance: 1495114893
-            description: BRI VIRTUAL ACCOUNT - 221111201014387981
-            reference: '221111201014387981'
-          - registerDate: '2022-01-12T09:39:32.773'
-            amount: 11000
-            type: C
-            lastBalance: 1495102893
-            description: BRI VIRTUAL ACCOUNT - 221111201014382800
-            reference: '221111201014382800'
-          - registerDate: '2022-01-12T09:39:30.53'
-            amount: 11000
-            type: C
-            lastBalance: 1495091893
-            description: BRI VIRTUAL ACCOUNT - 221111201014379173
-            reference: '221111201014379173'
-          - registerDate: '2022-01-12T09:39:28.207'
-            amount: 11000
-            type: C
-            lastBalance: 1495080893
-            description: BRI VIRTUAL ACCOUNT - 221111201014374997
-            reference: '221111201014374997'
-          - registerDate: '2022-01-12T09:39:09.31'
-            amount: 11000
-            type: C
-            lastBalance: 1495069893
-            description: BRI VIRTUAL ACCOUNT - 221111201014369219
-            reference: '221111201014369219'
-          - registerDate: '2022-01-12T09:39:06.877'
-            amount: 11000
-            type: C
-            lastBalance: 1495058893
-            description: BRI VIRTUAL ACCOUNT - 221111201014368301
-            reference: '221111201014368301'
-          - registerDate: '2022-01-12T09:15:27.533'
-            amount: 76000
-            type: C
-            lastBalance: 1495047893
-            description: BRI VIRTUAL ACCOUNT - 221111201013645769
-            reference: '221111201013645769'
-          - registerDate: '2022-01-12T09:15:12.48'
-            amount: 76000
-            type: C
-            lastBalance: 1494971893
-            description: BRI VIRTUAL ACCOUNT - 221111202013638303
-            reference: '221111202013638303'
-          - registerDate: '2022-01-12T09:15:10.267'
-            amount: 76000
-            type: C
-            lastBalance: 1494895893
-            description: BRI VIRTUAL ACCOUNT - 221111203013621445
-            reference: '221111203013621445'
-          - registerDate: '2022-01-12T09:15:07.603'
-            amount: 76000
-            type: C
-            lastBalance: 1494819893
-            description: BRI VIRTUAL ACCOUNT - 221111204013608478
-            reference: '221111204013608478'
-          - registerDate: '2022-01-12T09:15:04.997'
-            amount: 76000
-            type: C
-            lastBalance: 1494743893
-            description: BRI VIRTUAL ACCOUNT - 221111205013595415
-            reference: '221111205013595415'
-          - registerDate: '2022-01-12T09:15:04.67'
-            amount: 76000
-            type: C
-            lastBalance: 1494667893
-            description: BRI VIRTUAL ACCOUNT - 221111205013595415
-            reference: '221111205013595415'
-          - registerDate: '2022-01-12T09:14:44.187'
-            amount: 50000
-            type: C
-            lastBalance: 1494591893
-            description: BRI VIRTUAL ACCOUNT - 221185816013578356
-            reference: '221185816013578356'
-          - registerDate: '2022-01-12T09:14:42.49'
-            amount: 50000
-            type: C
-            lastBalance: 1494541893
-            description: BRI VIRTUAL ACCOUNT - 221185816013578356
-            reference: '221185816013578356'
-          - registerDate: '2022-01-12T09:14:40.573'
-            amount: 50000
-            type: C
-            lastBalance: 1494491893
-            description: BRI VIRTUAL ACCOUNT - 221118838013563805
-            reference: '221118838013563805'
-          - registerDate: '2022-01-12T09:14:39.283'
-            amount: 50000
-            type: C
-            lastBalance: 1494441893
-            description: BRI VIRTUAL ACCOUNT - 221118838013563805
-            reference: '221118838013563805'
-          - registerDate: '2022-01-12T09:14:37.54'
-            amount: 50000
-            type: C
-            lastBalance: 1494391893
-            description: BRI VIRTUAL ACCOUNT - 221188370013548978
-            reference: '221188370013548978'
-          - registerDate: '2022-01-12T09:14:34.927'
-            amount: 50000
-            type: C
-            lastBalance: 1494341893
-            description: BRI VIRTUAL ACCOUNT - 221188370013548978
-            reference: '221188370013548978'
-          - registerDate: '2022-01-11T17:56:24.377'
-            amount: 15000
-            type: D
-            lastBalance: 1494291893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T17:56:16.113'
-            amount: 15000
-            type: D
-            lastBalance: 1494306893
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T17:40:21.113'
-            amount: 34000
-            type: C
-            lastBalance: 1494321893
-            description: BRI VIRTUAL ACCOUNT - 221011103017584062
-            reference: '221011103017584062'
-          - registerDate: '2022-01-11T17:35:08.177'
-            amount: 22500
-            type: C
-            lastBalance: 1494287893
-            description: BRI VIRTUAL ACCOUNT - 221011104017111832
-            reference: '221011104017111832'
-          - registerDate: '2022-01-11T17:35:07.727'
-            amount: 22400
-            type: C
-            lastBalance: 1494265393
-            description: BRI VIRTUAL ACCOUNT - 221011104017108368
-            reference: '221011104017108368'
-          - registerDate: '2022-01-11T17:35:07.26'
-            amount: 22300
-            type: C
-            lastBalance: 1494242993
-            description: BRI VIRTUAL ACCOUNT - 221011104017104468
-            reference: '221011104017104468'
-          - registerDate: '2022-01-11T17:35:06.813'
-            amount: 22200
-            type: C
-            lastBalance: 1494220693
-            description: BRI VIRTUAL ACCOUNT - 221011104017100270
-            reference: '221011104017100270'
-          - registerDate: '2022-01-11T17:35:06.367'
-            amount: 22100
-            type: C
-            lastBalance: 1494198493
-            description: BRI VIRTUAL ACCOUNT - 221011104017095635
-            reference: '221011104017095635'
-          - registerDate: '2022-01-11T17:35:05.893'
-            amount: 22000
-            type: C
-            lastBalance: 1494176393
-            description: BRI VIRTUAL ACCOUNT - 221011104017091827
-            reference: '221011104017091827'
-          - registerDate: '2022-01-11T17:35:05.423'
-            amount: 22000
-            type: C
-            lastBalance: 1494154393
-            description: BRI VIRTUAL ACCOUNT - 221011104017089904
-            reference: '221011104017089904'
-          - registerDate: '2022-01-11T17:28:39.73'
-            amount: 15000
-            type: D
-            lastBalance: 1494132393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T17:28:31.803'
-            amount: 15000
-            type: D
-            lastBalance: 1494147393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T17:26:04.55'
-            amount: 45000
-            type: C
-            lastBalance: 1494162393
-            description: BRI VIRTUAL ACCOUNT - 221011104016635236
-            reference: '221011104016635236'
-          - registerDate: '2022-01-11T17:16:02.843'
-            amount: 15000
-            type: D
-            lastBalance: 1494117393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T17:15:56.48'
-            amount: 15000
-            type: D
-            lastBalance: 1494132393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T17:15:50.117'
-            amount: 15000
-            type: D
-            lastBalance: 1494147393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T17:15:43.76'
-            amount: 15000
-            type: D
-            lastBalance: 1494162393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T17:15:37.127'
-            amount: 15000
-            type: D
-            lastBalance: 1494177393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T16:09:02.437'
-            amount: 50000
-            type: C
-            lastBalance: 1494192393
-            description: BRI VIRTUAL ACCOUNT - 221015596012059877
-            reference: '221015596012059877'
-          - registerDate: '2022-01-11T16:09:00.54'
-            amount: 50000
-            type: C
-            lastBalance: 1494142393
-            description: BRI VIRTUAL ACCOUNT - 221078300012030756
-            reference: '221078300012030756'
-          - registerDate: '2022-01-11T15:30:09'
-            amount: 15000
-            type: D
-            lastBalance: 1494092393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T15:30:05.13'
-            amount: 15000
-            type: D
-            lastBalance: 1494107393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T15:25:40.35'
-            amount: 15000
-            type: D
-            lastBalance: 1494122393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T15:25:34.21'
-            amount: 15000
-            type: D
-            lastBalance: 1494137393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T15:25:27.76'
-            amount: 15000
-            type: D
-            lastBalance: 1494152393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T15:22:53.31'
-            amount: 15000
-            type: D
-            lastBalance: 1494167393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T15:22:48.173'
-            amount: 15000
-            type: D
-            lastBalance: 1494182393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T14:00:51.583'
-            amount: 15000
-            type: D
-            lastBalance: 1494197393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T14:00:43.477'
-            amount: 15000
-            type: D
-            lastBalance: 1494212393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T13:41:24.59'
-            amount: 15000
-            type: D
-            lastBalance: 1494227393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T13:41:24.277'
-            amount: 15000
-            type: D
-            lastBalance: 1494242393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T12:04:35.26'
-            amount: 15000
-            type: D
-            lastBalance: 1494257393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T12:04:18.507'
-            amount: 15000
-            type: D
-            lastBalance: 1494272393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T11:57:00.213'
-            amount: 15000
-            type: D
-            lastBalance: 1494287393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T11:56:52.617'
-            amount: 15000
-            type: D
-            lastBalance: 1494302393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T10:00:24.333'
-            amount: 15000
-            type: D
-            lastBalance: 1494317393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T10:00:24.083'
-            amount: 15000
-            type: D
-            lastBalance: 1494332393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T09:30:02.6'
-            amount: 15000
-            type: D
-            lastBalance: 1494347393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T09:30:02.27'
-            amount: 15000
-            type: D
-            lastBalance: 1494362393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T09:07:34.283'
-            amount: 15000
-            type: D
-            lastBalance: 1494377393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-11T09:07:33.923'
-            amount: 15000
-            type: D
-            lastBalance: 1494392393
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-05T18:05:47.233'
-            amount: 13
-            type: C
-            lastBalance: 1494407393
-            description: OVO PAYMENT - OVH0WNYDM7G1IINLL
-            reference: OVH0WNYDM7G1IINLL
-          - registerDate: '2022-01-05T18:03:37.107'
-            amount: null
-            type: C
-            lastBalance: 1494407380
-            description: null
-            reference: null
-          - registerDate: '2022-01-05T17:44:51.927'
-            amount: null
-            type: C
-            lastBalance: 1494407367
-            description: null
-            reference: null
-          - registerDate: '2022-01-05T17:38:32.607'
-            amount: null
-            type: C
-            lastBalance: 1494407355
-            description: null
-            reference: null
-          - registerDate: '2022-01-05T13:22:39.87'
-            amount: 15000
-            type: D
-            lastBalance: 1494407342
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-05T13:22:39.497'
-            amount: 15000
-            type: D
-            lastBalance: 1494422342
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-05T11:17:28.583'
-            amount: 7110
-            type: D
-            lastBalance: 1494437342
-            description: void CC TEST BUG DESIGN
-            reference: void CC TEST BUG DESIGN
-          - registerDate: '2022-01-05T10:15:09.367'
-            amount: 10
-            type: C
-            lastBalance: 1494444452
-            description: OVO PAYMENT - OV3SW6PTDHXENKK0F
-            reference: OV3SW6PTDHXENKK0F
-          - registerDate: '2022-01-04T13:11:34.203'
-            amount: 16
-            type: D
-            lastBalance: 1494444442
-            description: 'VOID NEw '
-            reference: 'VOID NEw '
-          - registerDate: '2022-01-04T13:10:26.6'
-            amount: 16
-            type: C
-            lastBalance: 1494444458
-            description: OVO PAYMENT - OVRBRCW1JGW25ER4Z
-            reference: OVRBRCW1JGW25ER4Z
-          - registerDate: '2022-01-04T11:52:18.99'
-            amount: 14
-            type: C
-            lastBalance: 1494444442
-            description: OVO PAYMENT - OVH361RD7D0KHGVMD
-            reference: OVH361RD7D0KHGVMD
-          - registerDate: '2022-01-04T10:33:21.953'
-            amount: 12
-            type: D
-            lastBalance: 1494444428
-            description: TEST VOID
-            reference: TEST VOID
-          - registerDate: '2022-01-04T10:09:04.633'
-            amount: 12
-            type: C
-            lastBalance: 1494444440
-            description: OVO PAYMENT - OVIQJXLXP4II6UDOI
-            reference: OVIQJXLXP4II6UDOI
-          - registerDate: '2022-01-03T17:05:27.977'
-            amount: 14
-            type: C
-            lastBalance: 1494444428
-            description: OVO PAYMENT - OVPQUOQ1PICQDDZ1Q
-            reference: OVPQUOQ1PICQDDZ1Q
-          - registerDate: '2022-01-03T14:06:13.843'
-            amount: 13
-            type: D
-            lastBalance: 1494444414
-            description: Void From Api
-            reference: Void From Api
-          - registerDate: '2022-01-03T13:50:08.043'
-            amount: 13
-            type: C
-            lastBalance: 1494444427
-            description: OVO PAYMENT - OVWSIM8XUZX7ZMZVU
-            reference: OVWSIM8XUZX7ZMZVU
-          - registerDate: '2022-01-03T13:47:24.993'
-            amount: 17
-            type: C
-            lastBalance: 1494444414
-            description: OVO PAYMENT - OVKZ1QFQSX5OJFR2A
-            reference: OVKZ1QFQSX5OJFR2A
-          - registerDate: '2022-01-03T12:07:38.377'
-            amount: 17
-            type: C
-            lastBalance: 1494444397
-            description: OVO PAYMENT - OVCUZ8E2MGHNBPLOS
-            reference: OVCUZ8E2MGHNBPLOS
-          - registerDate: '2022-01-03T11:43:56.127'
-            amount: null
-            type: C
-            lastBalance: 1494444380
-            description: null
-            reference: null
-          - registerDate: '2022-01-03T11:42:43.607'
-            amount: 17
-            type: C
-            lastBalance: 1494444363
-            description: OVO PAYMENT - OV75KNLD5XKO3S0W1
-            reference: OV75KNLD5XKO3S0W1
-          - registerDate: '2022-01-03T11:25:31.96'
-            amount: 17
-            type: C
-            lastBalance: 1494444346
-            description: OVO PAYMENT - OVBHE3GJMH8QD0GMP
-            reference: OVBHE3GJMH8QD0GMP
-          - registerDate: '2022-01-03T11:18:12.447'
-            amount: 17
-            type: C
-            lastBalance: 1494444329
-            description: OVO PAYMENT - OVP4UCYLADAS0IY42
-            reference: OVP4UCYLADAS0IY42
-          - registerDate: '2022-01-03T10:36:05.487'
-            amount: 15000
-            type: D
-            lastBalance: 1494444312
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-03T10:35:13.103'
-            amount: 15000
-            type: D
-            lastBalance: 1494459312
-            description: Disbursement
-            reference: Done
-          - registerDate: '2022-01-03T10:32:02.73'
-            amount: 15000
-            type: D
-            lastBalance: 1494474312
-            description: Disbursement
-            reference: Done
       items:
         type: object
+        required:
+          - registerDate
+          - amount
+          - type
+          - lastBalance
+          - description
+          - transactionId
         properties:
           registerDate:
             type: string
@@ -1386,27 +382,165 @@ components:
           type:
             type: string
             minLength: 1
-            description: |-
-              C => Credit (Money In)<br/>
-              D => Debit (Money Out)
-            enum:
-              - C
-              - D
           lastBalance:
             type: number
           description:
             type: string
             minLength: 1
-          reference:
-            type: string
-            minLength: 1
-        required:
-          - registerDate
-          - amount
-          - type
-          - lastBalance
-          - description
-          - reference
+          transactionId:
+            type: number
+      x-examples:
+        example-1:
+          - registerDate: '2022-03-01 16:00:39'
+            amount: 7354123
+            type: C
+            lastBalance: 9512223
+            description: VA MAYBANK - VAUFCOZGP34BGPXZ1
+            transactionId: 73228
+          - registerDate: '2022-03-01 16:00:03'
+            amount: 11500
+            type: C
+            lastBalance: 2158100
+            description: VA MAYBANK - VA3QLIGWXNGUNJIE8
+            transactionId: 73226
+          - registerDate: '2022-03-01 14:10:11'
+            amount: 70371
+            type: C
+            lastBalance: 2146600
+            description: VA MAYBANK - VAZ5DKAP6AJQXPTYF
+            transactionId: 73215
+          - registerDate: '2022-03-01 14:09:32'
+            amount: 14000
+            type: C
+            lastBalance: 2076229
+            description: VA MAYBANK - VAXS7T21CV4D8PWC4
+            transactionId: 73214
+          - registerDate: '2022-02-23 16:50:42'
+            amount: 996999
+            type: C
+            lastBalance: 2062229
+            description: VA MAYBANK - VAB4S47C1D3NRS37M
+            transactionId: 72973
+          - registerDate: '2022-02-23 14:34:48'
+            amount: 53741
+            type: C
+            lastBalance: 1065230
+            description: VA MAYBANK - VA30MIZBIH4WD5L7B
+            transactionId: 72957
+          - registerDate: '2022-02-23 13:48:49'
+            amount: 70571
+            type: C
+            lastBalance: 1011489
+            description: VA MAYBANK - VA7CR35U05MNF0PT4
+            transactionId: 72950
+          - registerDate: '2022-02-23 12:21:14'
+            amount: 70571
+            type: C
+            lastBalance: 940918
+            description: VA MAYBANK - VAF4UWUWVAAAFQ4GW
+            transactionId: 72938
+          - registerDate: '2022-02-23 12:07:28'
+            amount: 70571
+            type: C
+            lastBalance: 870347
+            description: VA MAYBANK - VAXA8ND6CO4SXRRQW
+            transactionId: 72937
+          - registerDate: '2022-02-23 12:04:53'
+            amount: 70571
+            type: C
+            lastBalance: 799776
+            description: VA MAYBANK - VAG48S8G7LEPIDILK
+            transactionId: 72936
+          - registerDate: '2022-02-23 11:55:10'
+            amount: 9345
+            type: C
+            lastBalance: 729205
+            description: VA MAYBANK - VAH2G8UZQK87XOW3K
+            transactionId: 72935
+          - registerDate: '2022-02-23 11:31:01'
+            amount: 9345
+            type: C
+            lastBalance: 719860
+            description: VA MAYBANK - VA4JVRDOFPLO4TFQM
+            transactionId: 72934
+          - registerDate: '2022-02-23 11:17:53'
+            amount: 70571
+            type: C
+            lastBalance: 710515
+            description: VA MAYBANK - VAOTVX6KS4GZ8B5NK
+            transactionId: 72931
+          - registerDate: '2022-02-23 11:17:43'
+            amount: 70575
+            type: C
+            lastBalance: 639944
+            description: VA MAYBANK - VARJKC2L73QIG78ZN
+            transactionId: 72930
+          - registerDate: '2022-02-23 11:16:09'
+            amount: 70575
+            type: C
+            lastBalance: 569369
+            description: VA MAYBANK - VAPYA7C3IDXJYJ8KQ
+            transactionId: 72929
+          - registerDate: '2022-02-23 11:13:39'
+            amount: 70571
+            type: C
+            lastBalance: 498794
+            description: VA MAYBANK - VAJW3QYWJZDQGQUXH
+            transactionId: 72927
+          - registerDate: '2022-02-23 11:01:59'
+            amount: 68777
+            type: C
+            lastBalance: 428223
+            description: VA MAYBANK - VATGNKDROKT2DJP48
+            transactionId: 72925
+          - registerDate: '2022-02-23 10:58:19'
+            amount: 70575
+            type: C
+            lastBalance: 359446
+            description: VA MAYBANK - VAEIVNEOMFJNIPTGM
+            transactionId: 72924
+          - registerDate: '2022-02-23 10:54:17'
+            amount: 70571
+            type: C
+            lastBalance: 288871
+            description: VA MAYBANK - VAXTWGM0QU4JKEWT6
+            transactionId: 72922
+          - registerDate: '2022-02-23 10:53:19'
+            amount: 12300
+            type: C
+            lastBalance: 218300
+            description: VA MAYBANK - VA5IXZPCKI20HFI5F
+            transactionId: 72921
+          - registerDate: '2022-02-23 10:09:00'
+            amount: 12500
+            type: C
+            lastBalance: 206000
+            description: VA MAYBANK - VA15X3TILYICU1N26
+            transactionId: 72917
+          - registerDate: '2022-02-23 09:49:25'
+            amount: 9500
+            type: C
+            lastBalance: 193500
+            description: VA MAYBANK - VA4WDUW0ULT856M0R
+            transactionId: 72916
+          - registerDate: '2022-02-23 09:49:14'
+            amount: 9500
+            type: C
+            lastBalance: 184000
+            description: VA MAYBANK - VASFNWDE1LJXA1S05
+            transactionId: 72915
+          - registerDate: '2022-02-23 09:48:58'
+            amount: 9500
+            type: C
+            lastBalance: 174500
+            description: VA MAYBANK - VAUQ0YRLAJOH84OEQ
+            transactionId: 72914
+          - registerDate: '2022-02-23 09:37:03'
+            amount: 14000
+            type: C
+            lastBalance: 165000
+            description: VA MAYBANK - VA40J7006A0HNAU04
+            transactionId: 72913
     MoneyIn:
       type: array
       description: ''
