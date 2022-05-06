@@ -914,7 +914,6 @@ components:
             feeAmount: 4400
             status: ID
     MerchantDetail:
-      description: ''
       type: object
       x-examples:
         example-1:
@@ -964,228 +963,123 @@ components:
             - bankCode: '016'
               bankName: Maybank
               vaNumber: '7828700000000001'
-            - bankCode: '013'
-              bankName: Permata Bank
-              vaNumber: '8680000000000001'
+              accountNameDifferentBank: Lorem ipsum dolor sit amet
+              accountNameSameBank: Lorem ipsum dolor sit amet
+              swiftCode: IBBKIDJA
+              bankAddress: 'Sentral Senayan 3 8 JL. Asia Afrika Kompleks Gelora Bung Karno, Jakarta, 10270'
           disbursementKey: null
       properties:
         id:
-          type: number
+          type: integer
         email:
           type: string
-          minLength: 1
         phoneNumber:
           type: string
-          minLength: 1
         status:
           type: string
-          minLength: 1
-          enum:
-            - ACTIVE
-            - BLOCKED
-            - PHONE_NOT_VERIFIED
-            - UNVERIFIED
-            - PROCESSING
-            - CLOSED
-            - REJECTED
         businessInfo:
           type: object
-          required:
-            - merchantType
-            - businessLocation
-            - businessTypeId
-            - nationality
-            - description
-            - brandName
-            - website
-            - businessAddress
-            - domicileAddress
-            - companyName
           properties:
             merchantType:
-              type: number
-              enum:
-                - 1
-                - 2
-              description: Merchant type consist of Personal (1) or Company (2)
+              type: integer
             businessLocation:
-              type: number
-              enum:
-                - 1
-                - 2
-              description: Business Location consist of Indonesia (1) or Overseas (2)
+              type: integer
             businessTypeId:
-              type: number
+              type: integer
             nationality:
-              type: number
-              enum:
-                - 1
-                - 2
-              description: Nationality consist of Indonesian (1) or Foreigner (2)
+              type: integer
             description:
               type: string
-              minLength: 1
             brandName:
               type: string
-              minLength: 1
             website:
               type: string
-              minLength: 1
             businessAddress:
               type: string
-              minLength: 1
             domicileAddress:
               type: string
-              minLength: 1
             companyName:
               type: string
-              minLength: 1
         picInfo:
           type: object
-          required:
-            - identificationType
-            - identificationNumber
-            - picName
-            - picDob
-            - picAddress
-            - picGender
           properties:
             identificationType:
               type: string
-              minLength: 1
-              enum:
-                - KTP
-                - PASPOR
-                - KITAS
             identificationNumber:
               type: string
-              minLength: 1
             picName:
               type: string
-              minLength: 1
             picDob:
               type: string
-              minLength: 1
             picAddress:
               type: string
-              minLength: 1
             picGender:
-              type: number
-              enum:
-                - 0
-                - 1
-              description: 'PIC Gender (0 - Female, 1 - Male)'
+              type: integer
         transactionProfile:
           type: object
-          required:
-            - avgVolumePerDay
-            - avgVolumePerMonth
-            - avgNominalPerDay
-            - avgNominalPerMonth
           properties:
             avgVolumePerDay:
-              type: number
+              type: integer
             avgVolumePerMonth:
-              type: number
+              type: integer
             avgNominalPerDay:
-              type: number
+              type: integer
             avgNominalPerMonth:
-              type: number
+              type: integer
         bankInfo:
           type: object
-          required:
-            - bankCode
-            - bankName
-            - bankBranch
-            - bankAccountNumber
-            - bankAccountName
-            - swiftCode
           properties:
             bankCode:
               type: string
-              minLength: 1
             bankName:
               type: string
-              minLength: 1
             bankBranch:
               type: string
-              minLength: 1
             bankAccountNumber:
               type: string
-              minLength: 1
             bankAccountName:
               type: string
-              minLength: 1
             swiftCode:
               type: string
-              minLength: 1
         customerServiceContactInfo:
           type: object
-          required:
-            - mainPhoneNumber
-            - emergencyPhoneNumber
-            - email
           properties:
             mainPhoneNumber:
               type: string
-              minLength: 1
             emergencyPhoneNumber:
               type: string
-              minLength: 1
             email:
               type: string
-              minLength: 1
         technicalServiceContactInfo:
           type: object
-          required:
-            - mainPhoneNumber
-            - emergencyPhoneNumber
-            - email
           properties:
             mainPhoneNumber:
               type: string
-              minLength: 1
             emergencyPhoneNumber:
               type: string
-              minLength: 1
             email:
               type: string
-              minLength: 1
         merchantVaNumber:
           type: array
-          uniqueItems: true
-          minItems: 1
           items:
             type: object
             properties:
               bankCode:
                 type: string
-                minLength: 1
               bankName:
                 type: string
-                minLength: 1
               vaNumber:
                 type: string
-                minLength: 1
-            required:
-              - bankName
-              - vaNumber
+              accountNameDifferentBank:
+                type: string
+              accountNameSameBank:
+                type: string
+              swiftCode:
+                type: string
+              bankAddress:
+                type: string
         disbursementKey:
           type: string
-          description: Merchant Key for disbursement (Money out)
-      required:
-        - id
-        - email
-        - phoneNumber
-        - status
-        - businessInfo
-        - picInfo
-        - transactionProfile
-        - bankInfo
-        - customerServiceContactInfo
-        - technicalServiceContactInfo
-        - merchantVaNumber
-        - disbursementKey
     AllBusinessType:
       type: array
       description: ''
@@ -1858,42 +1752,31 @@ components:
           type: string
           format: binary
     Webhook(MoneyIn):
-      description: ''
       type: object
-      x-examples:
-        example-1:
-          merchantId: '1'
-          type: money-in-notification
-          registerDate: '2022-02-02 16:24:54'
-          vaNumber: '9005025668178633'
-          amount: 120000
-          publisherOrderId: D0001T2UHO4PUOKMFUS2
       properties:
+        amount:
+          type: integer
         merchantId:
           type: string
-          minLength: 1
-        type:
-          type: string
-          minLength: 1
-        registerDate:
-          type: string
-          minLength: 1
-        vaNumber:
-          type: string
-          minLength: 1
-        amount:
-          type: number
         publisherOrderId:
           type: string
-          minLength: 1
-          description: 'Need to change key name from reference to publisherOrderId, for our internal needs.'
-      required:
-        - merchantId
-        - type
-        - registerDate
-        - vaNumber
-        - amount
-        - publisherOrderId
+        registerDate:
+          type: string
+        type:
+          type: string
+        vaNumber:
+          type: string
+        transactionId:
+          type: string
+      x-examples:
+        example-1:
+          amount: 105455000
+          merchantId: '31922'
+          publisherOrderId: '-'
+          registerDate: '2022-04-27 13:59:00'
+          type: money-in-notification
+          vaNumber: '-'
+          transactionId: '-'
     MoneyIn-TransferInternal:
       type: array
       description: ''
