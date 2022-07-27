@@ -342,6 +342,194 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/InternalTransfer'
+  '/project/{merchantId}':
+    parameters:
+      - name: merchantId
+        in: path
+        required: true
+        schema:
+          type: integer
+          example: 1
+        description: ID of Merchant
+    post:
+      summary: Create Project Merchant
+      operationId: post-project-merchantId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectMerchantResponse'
+        '400':
+          description: Please check the requirement request || User is not active
+        '404':
+          description: User data not found
+        '500':
+          description: Please try again later
+      description: ''
+      parameters:
+        - $ref: '#/components/parameters/X-duitku-code'
+        - $ref: '#/components/parameters/X-duitku-timestamp'
+        - $ref: '#/components/parameters/X-duitku-signature'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddProjectMerchant'
+      tags:
+        - Project
+    get:
+      summary: Get List Project Merchant
+      operationId: get-project-merchantId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListProjectMerchant'
+        '400':
+          description: User data not found
+        '500':
+          description: Please try again later
+      parameters:
+        - $ref: '#/components/parameters/X-duitku-code'
+        - $ref: '#/components/parameters/X-duitku-timestamp'
+        - $ref: '#/components/parameters/X-duitku-signature'
+      tags:
+        - Project
+  '/project/{merchantId}/{projectId}':
+    parameters:
+      - $ref: '#/components/parameters/merchantId'
+      - $ref: '#/components/parameters/projectId'
+    get:
+      summary: Get Detail Project Merchant
+      tags:
+        - Project
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectMerchantResponse'
+        '404':
+          description: Project data not found || User data not found
+        '500':
+          description: Please try again later
+      operationId: get-project-merchantId-projectId
+      parameters:
+        - $ref: '#/components/parameters/X-duitku-code'
+        - $ref: '#/components/parameters/X-duitku-timestamp'
+        - $ref: '#/components/parameters/X-duitku-signature'
+    put:
+      summary: Update Project Merchant
+      operationId: put-project-merchantId-projectId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectMerchantResponse'
+        '400':
+          description: 'Invalid input, object invalid || Please check the requirement request'
+        '500':
+          description: Please try again later
+      parameters:
+        - $ref: '#/components/parameters/X-duitku-code'
+        - $ref: '#/components/parameters/X-duitku-timestamp'
+        - $ref: '#/components/parameters/X-duitku-signature'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddProjectMerchant'
+      tags:
+        - Project
+  '/project/{merchantId}/{projectId}/attachment':
+    parameters:
+      - $ref: '#/components/parameters/merchantId'
+      - $ref: '#/components/parameters/projectId'
+    post:
+      summary: Attachment Project
+      operationId: post-project-merchantId-projectId-attachment
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttachmentProjectResponse'
+        '400':
+          description: Unknown file type || File is not exist || Maximum size 2Mb || Extension file is not supported || Undefined Type || Image LOGO must be 100x100px || Image BACKGROUND must be 1920x1080px
+        '404':
+          description: User data not found || Project is not exist
+        '500':
+          description: Please try again later
+      tags:
+        - Project
+      parameters:
+        - $ref: '#/components/parameters/X-duitku-code'
+        - $ref: '#/components/parameters/X-duitku-timestamp'
+        - $ref: '#/components/parameters/X-duitku-signature'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AttachmentProjectRequest'
+  /additionaldata/bank:
+    get:
+      summary: List Data Bank
+      tags:
+        - Additional Data
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdditionalDataBank'
+      operationId: get-additionaldata-bank
+      parameters:
+        - $ref: '#/components/parameters/X-duitku-code'
+        - $ref: '#/components/parameters/X-duitku-timestamp'
+        - $ref: '#/components/parameters/X-duitku-signature'
+  /additionaldata/country:
+    get:
+      summary: List Data Country
+      tags:
+        - Additional Data
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdditionalDataCountry'
+      operationId: get-additionaldata-country
+      parameters:
+        - $ref: '#/components/parameters/X-duitku-code'
+        - $ref: '#/components/parameters/X-duitku-timestamp'
+        - $ref: '#/components/parameters/X-duitku-signature'
+  /additionaldata/businesstype:
+    get:
+      summary: List Data Business Type
+      tags:
+        - Additional Data
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdditionalDataBusinessType'
+      operationId: get-additionaldata-businesstype
+      parameters:
+        - $ref: '#/components/parameters/X-duitku-code'
+        - $ref: '#/components/parameters/X-duitku-timestamp'
+        - $ref: '#/components/parameters/X-duitku-signature'
 components:
   schemas:
     Balance:
@@ -968,53 +1156,112 @@ components:
               swiftCode: IBBKIDJA
               bankAddress: 'Sentral Senayan 3 8 JL. Asia Afrika Kompleks Gelora Bung Karno, Jakarta, 10270'
           disbursementKey: null
+      description: ''
       properties:
         id:
           type: integer
         email:
           type: string
+          maxLength: 100
+          minLength: 1
         phoneNumber:
           type: string
+          minLength: 1
+          maxLength: 50
         status:
           type: string
+          enum:
+            - ACTIVE
+            - INACTIVE
+            - BLOCKED
+            - REACTIVE
+            - PHONE_NOT_VERIFIED
+            - UNVERFIED
+            - PROCESSING
+            - CLOSED
+            - REJECTED
+          maxLength: 20
+          minLength: 1
         businessInfo:
           type: object
           properties:
             merchantType:
               type: integer
+              enum:
+                - 1
+                - 2
+              description: Merchant type consist of Personal (1) or Company (2)
             businessLocation:
               type: integer
+              enum:
+                - 1
+                - 2
+              description: 'Business Location consist of 1 (Indonesia), 2 (Overseas)'
             businessTypeId:
               type: integer
+              enum:
+                - 1
+                - 2
+              description: data can be obtained from api endpoint /businesstype
             nationality:
               type: integer
+              description: 'Nationality consist of 1 (Indonesian), 2 (Foreigner)'
+            countryCode:
+              type: string
+              minLength: 1
+              maxLength: 3
             description:
               type: string
+              minLength: 1
+              maxLength: 255
             brandName:
               type: string
+              minLength: 1
+              maxLength: 255
             website:
               type: string
+              minLength: 1
+              maxLength: 255
             businessAddress:
               type: string
+              minLength: 1
+              maxLength: 640
             domicileAddress:
               type: string
+              minLength: 0
+              maxLength: 640
             companyName:
               type: string
+              minLength: 1
+              maxLength: 100
         picInfo:
           type: object
           properties:
             identificationType:
               type: string
+              minLength: 1
+              maxLength: 50
             identificationNumber:
               type: string
+              minLength: 1
+              maxLength: 100
             picName:
               type: string
+              minLength: 1
+              maxLength: 100
+              enum:
+                - YYYY-MM-DD
             picDob:
               type: string
+              minLength: 1
+              maxLength: 10
             picAddress:
               type: string
+              minLength: 1
+              maxLength: 255
             picGender:
               type: integer
+              description: 'PIC Gender (0 - Female, 1 - Male)'
         transactionProfile:
           type: object
           properties:
@@ -1031,34 +1278,58 @@ components:
           properties:
             bankCode:
               type: string
+              minLength: 0
+              maxLength: 30
             bankName:
               type: string
+              minLength: 0
+              maxLength: 100
             bankBranch:
               type: string
+              minLength: 0
+              maxLength: 100
             bankAccountNumber:
               type: string
+              minLength: 0
+              maxLength: 50
             bankAccountName:
               type: string
+              minLength: 0
+              maxLength: 100
             swiftCode:
               type: string
+              minLength: 0
+              maxLength: 100
         customerServiceContactInfo:
           type: object
           properties:
             mainPhoneNumber:
               type: string
+              minLength: 0
+              maxLength: 20
             emergencyPhoneNumber:
               type: string
+              minLength: 0
+              maxLength: 20
             email:
               type: string
+              minLength: 0
+              maxLength: 255
         technicalServiceContactInfo:
           type: object
           properties:
             mainPhoneNumber:
               type: string
+              minLength: 0
+              maxLength: 20
             emergencyPhoneNumber:
               type: string
+              minLength: 0
+              maxLength: 20
             email:
               type: string
+              minLength: 0
+              maxLength: 255
         merchantVaNumber:
           type: array
           items:
@@ -1301,9 +1572,11 @@ components:
         email:
           type: string
           minLength: 1
+          maxLength: 100
         phoneNumber:
           type: string
           minLength: 1
+          maxLength: 50
         businessInfo:
           type: object
           required:
@@ -1311,11 +1584,11 @@ components:
             - businessLocation
             - businessTypeId
             - nationality
+            - countryCode
             - description
             - brandName
             - website
             - businessAddress
-            - domicileAddress
             - companyName
           properties:
             merchantType:
@@ -1332,30 +1605,42 @@ components:
               description: 'Business Location consist of 1 (Indonesia), 2 (Overseas)'
             businessTypeId:
               type: number
+              description: data can be obtained from api endpoint additionaldata/businesstype
             nationality:
               type: number
               enum:
                 - 1
                 - 2
               description: 'Nationality consist of 1 (Indonesian), 2 (Foreigner)'
+            countryCode:
+              type: string
+              minLength: 1
+              maxLength: 5
+              description: data can be obtained from api endpoint additionaldata/country
             description:
               type: string
               minLength: 1
+              maxLength: 255
             brandName:
               type: string
               minLength: 1
+              maxLength: 255
             website:
               type: string
               minLength: 1
+              maxLength: 255
             businessAddress:
               type: string
               minLength: 1
+              maxLength: 640
             domicileAddress:
               type: string
-              minLength: 1
+              maxLength: 640
+              minLength: 0
             companyName:
               type: string
               minLength: 1
+              maxLength: 100
         picInfo:
           type: object
           required:
@@ -1370,21 +1655,28 @@ components:
               type: string
               minLength: 1
               enum:
-                - KTP
-                - PASPOR
+                - ID CARD
+                - PASSPORT
                 - KITAS
+              maxLength: 50
             identificationNumber:
               type: string
               minLength: 1
+              maxLength: 100
             picName:
               type: string
               minLength: 1
+              maxLength: 100
             picDob:
               type: string
               minLength: 1
+              maxLength: 10
+              enum:
+                - YYYY-MM-DD
             picAddress:
               type: string
               minLength: 1
+              maxLength: 255
             picGender:
               type: number
               enum:
@@ -1393,11 +1685,6 @@ components:
               description: 'PIC Gender (0 - Female, 1 - Male)'
         transactionProfile:
           type: object
-          required:
-            - avgVolumePerDay
-            - avgVolumePerMonth
-            - avgNominalPerDay
-            - avgNominalPerMonth
           properties:
             avgVolumePerDay:
               type: number
@@ -1409,73 +1696,63 @@ components:
               type: number
         bankInfo:
           type: object
-          required:
-            - bankCode
-            - bankName
-            - bankBranch
-            - bankAccountNumber
-            - bankAccountName
-            - swiftCode
           properties:
             bankCode:
               type: string
-              minLength: 1
-            bankName:
-              type: string
-              minLength: 1
+              maxLength: 30
+              minLength: 0
+              description: data can be obtained from api endpoint additionaldata/bank
             bankBranch:
               type: string
-              minLength: 1
+              maxLength: 100
+              minLength: 0
             bankAccountNumber:
               type: string
-              minLength: 1
+              maxLength: 50
+              minLength: 0
             bankAccountName:
               type: string
-              minLength: 1
+              maxLength: 100
+              minLength: 0
             swiftCode:
               type: string
-              minLength: 1
+              maxLength: 100
+              minLength: 0
         customerServiceContactInfo:
           type: object
-          required:
-            - mainPhoneNumber
-            - emergencyPhoneNumber
-            - email
           properties:
             mainPhoneNumber:
               type: string
-              minLength: 1
+              maxLength: 20
+              minLength: 0
             emergencyPhoneNumber:
               type: string
-              minLength: 1
+              maxLength: 20
+              minLength: 0
             email:
               type: string
-              minLength: 1
+              maxLength: 255
+              minLength: 0
         technicalServiceContactInfo:
           type: object
-          required:
-            - mainPhoneNumber
-            - emergencyPhoneNumber
-            - email
           properties:
             mainPhoneNumber:
               type: string
-              minLength: 1
+              maxLength: 20
+              minLength: 0
             emergencyPhoneNumber:
               type: string
-              minLength: 1
+              maxLength: 20
+              minLength: 0
             email:
               type: string
-              minLength: 1
+              maxLength: 255
+              minLength: 0
       required:
         - email
         - phoneNumber
         - businessInfo
         - picInfo
-        - transactionProfile
-        - bankInfo
-        - customerServiceContactInfo
-        - technicalServiceContactInfo
     UpdateMerchant:
       description: ''
       type: object
@@ -1526,10 +1803,12 @@ components:
           type: string
           minLength: 1
           default: your_registered_email
+          maxLength: 100
         phoneNumber:
           type: string
           minLength: 1
           default: your_registered_phonenumber
+          maxLength: 50
         businessInfo:
           type: object
           required:
@@ -1537,11 +1816,11 @@ components:
             - businessLocation
             - businessTypeId
             - nationality
+            - countryCode
             - description
             - brandName
             - website
             - businessAddress
-            - domicileAddress
             - companyName
           properties:
             merchantType:
@@ -1558,30 +1837,42 @@ components:
               description: 'Business Location consist of 1 (Indonesia), 2 (Overseas)'
             businessTypeId:
               type: number
+              description: data can be obtained from api endpoint additionaldata/businesstype
             nationality:
               type: number
               enum:
                 - 1
                 - 2
               description: 'Nationality consist of 1 (Indonesian), 2 (Foreigner)'
+            countryCode:
+              type: string
+              minLength: 1
+              description: data can be obtained from api endpoint additionaldata/country
+              maxLength: 5
             description:
               type: string
               minLength: 1
+              maxLength: 255
             brandName:
               type: string
               minLength: 1
+              maxLength: 255
             website:
               type: string
               minLength: 1
+              maxLength: 255
             businessAddress:
               type: string
               minLength: 1
+              maxLength: 640
             domicileAddress:
               type: string
-              minLength: 1
+              minLength: 0
+              maxLength: 640
             companyName:
               type: string
               minLength: 1
+              maxLength: 100
         picInfo:
           type: object
           required:
@@ -1595,22 +1886,29 @@ components:
             identificationType:
               type: string
               minLength: 1
+              maxLength: 50
               enum:
-                - KTP
-                - PASPOR
+                - ID CARD
+                - PASSPORT
                 - KITAS
             identificationNumber:
               type: string
               minLength: 1
+              maxLength: 100
             picName:
               type: string
               minLength: 1
+              maxLength: 100
             picDob:
               type: string
               minLength: 1
+              maxLength: 10
+              enum:
+                - YYYY-MM-DD
             picAddress:
               type: string
               minLength: 1
+              maxLength: 255
             picGender:
               type: number
               enum:
@@ -1619,11 +1917,6 @@ components:
               description: 'PIC Gender (0 - Female, 1 - Male)'
         transactionProfile:
           type: object
-          required:
-            - avgVolumePerDay
-            - avgVolumePerMonth
-            - avgNominalPerDay
-            - avgNominalPerMonth
           properties:
             avgVolumePerDay:
               type: number
@@ -1635,73 +1928,63 @@ components:
               type: number
         bankInfo:
           type: object
-          required:
-            - bankCode
-            - bankName
-            - bankBranch
-            - bankAccountNumber
-            - bankAccountName
-            - swiftCode
           properties:
             bankCode:
               type: string
-              minLength: 1
-            bankName:
-              type: string
-              minLength: 1
+              minLength: 0
+              maxLength: 30
+              description: data can be obtained from api endpoint additionaldata/bank
             bankBranch:
               type: string
-              minLength: 1
+              maxLength: 100
+              minLength: 0
             bankAccountNumber:
               type: string
-              minLength: 1
+              maxLength: 50
+              minLength: 0
             bankAccountName:
               type: string
-              minLength: 1
+              maxLength: 100
+              minLength: 0
             swiftCode:
               type: string
-              minLength: 1
+              maxLength: 100
+              minLength: 0
         customerServiceContactInfo:
           type: object
-          required:
-            - mainPhoneNumber
-            - emergencyPhoneNumber
-            - email
           properties:
             mainPhoneNumber:
               type: string
-              minLength: 1
+              maxLength: 20
+              minLength: 0
             emergencyPhoneNumber:
               type: string
-              minLength: 1
+              maxLength: 20
+              minLength: 0
             email:
               type: string
-              minLength: 1
+              maxLength: 255
+              minLength: 0
         technicalServiceContactInfo:
           type: object
-          required:
-            - mainPhoneNumber
-            - emergencyPhoneNumber
-            - email
           properties:
             mainPhoneNumber:
               type: string
-              minLength: 1
+              maxLength: 20
+              minLength: 0
             emergencyPhoneNumber:
               type: string
-              minLength: 1
+              maxLength: 20
+              minLength: 0
             email:
               type: string
-              minLength: 1
+              maxLength: 255
+              minLength: 0
       required:
         - email
         - phoneNumber
         - businessInfo
         - picInfo
-        - transactionProfile
-        - bankInfo
-        - customerServiceContactInfo
-        - technicalServiceContactInfo
     AttachmentResponse:
       description: ''
       type: object
@@ -1967,6 +2250,171 @@ components:
           transactionId: 1820605
           responseCode: '00'
           responseMessage: SUCCESS
+    AddProjectMerchant:
+      type: object
+      x-examples:
+        example-1:
+          projectName: Your Business Project
+          website: 'https://business-project.com'
+      title: ''
+      properties:
+        projectName:
+          type: string
+        website:
+          type: string
+        callbackUrl:
+          type: string
+      required:
+        - projectName
+        - website
+        - callbackUrl
+    ProjectMerchantResponse:
+      type: object
+      x-examples:
+        example-1:
+          id: 8823
+          projectCode: D8823
+          projectKey: c6197b634c03cf57aadf15d17cc4afc8
+          projectName: Your Business Project
+          website: 'https://business-project.com'
+          websiteLogo: null
+          backgroundLogo: null
+      properties:
+        id:
+          type: integer
+        projectCode:
+          type: string
+        projectKey:
+          type: string
+        projectName:
+          type: string
+        website:
+          type: string
+        callbackUrl:
+          type: string
+        websiteLogo:
+          nullable: true
+        backgroundLogo:
+          nullable: true
+    ListProjectMerchant:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+          projectCode:
+            type: string
+          projectKey:
+            type: string
+          projectName:
+            type: string
+          website:
+            type: string
+          callbackUrl:
+            type: string
+          websiteLogo:
+            type: 'null'
+          backgroundLogo:
+            type: 'null'
+      x-examples:
+        example-1:
+          - id: 8822
+            projectCode: D7823
+            projectKey: c6197b634c03cf57aadf15d17cc4afc8
+            projectName: Your Business Project
+            website: 'https://business-project.com'
+            callbackUrl: 'https://business-project.com/callback'
+            websiteLogo: null
+            backgroundLogo: null
+          - id: 8823
+            projectCode: D8823
+            projectKey: c6197b634c03cf57aadf15d17cc4afc8
+            projectName: Store Suskes Selalu
+            website: 'https://business-project.com'
+            callbackUrl: 'https://business-project.com/callback'
+            websiteLogo: null
+            backgroundLogo: null
+    AttachmentProjectRequest:
+      title: AttachmentProjectRequest
+      x-stoplight:
+        id: vgtiypppdzr46
+      type: object
+      properties:
+        filename:
+          type: string
+        type:
+          type: string
+          enum:
+            - LOGO
+            - BACKGROUND
+          example: LOGO
+        file:
+          type: string
+      required:
+        - filename
+        - type
+    AttachmentProjectResponse:
+      type: object
+      properties:
+        type:
+          type: string
+        contentType:
+          type: string
+        fileUrl:
+          type: string
+      x-examples:
+        example-1:
+          type: LOGO
+          contentType: image/jpeg
+          fileUrl: 'http://192.168.0.11:8888/Upload/174c505c-797f-4abb-8d2b-c065cb24aee3.jpg'
+    AdditionalDataCountry:
+      type: array
+      items:
+        type: object
+        properties:
+          countryCode:
+            type: string
+          description:
+            type: string
+      x-examples:
+        example-1:
+          - countryCode: IDN
+            description: INDONESIA
+          - countryCode: KOR
+            description: KOREA
+    AdditionalDataBank:
+      type: array
+      items:
+        type: object
+        properties:
+          bankCode:
+            type: string
+          bankName:
+            type: string
+      x-examples:
+        example-1:
+          - bankCode: '014'
+            bankName: PT BANK CENTRAL ASIA TBK.
+          - bankCode: '002'
+            bankName: 'PT BANK RAKYAT INDONESIA (PERSERO), TBK.'
+    AdditionalDataBusinessType:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+          description:
+            type: string
+      x-examples:
+        example-1:
+          - id: 1
+            description: Agricultural Cooperative
+          - id: 2
+            description: Landscaping Services
+          - id: 3
+            description: General Contractors
   securitySchemes: {}
   parameters:
     merchantId:
@@ -2019,6 +2467,13 @@ components:
         format: date-time
         example: '2022-02-10 09:39:37'
       description: End date value for filter transaction
+    projectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: ID of Project Merchant
   responses:
     NotFound:
       description: Resource not found
