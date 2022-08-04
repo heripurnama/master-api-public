@@ -232,7 +232,7 @@ paths:
         - $ref: '#/components/parameters/X-duitku-timestamp'
   /api/callback:
     post:
-      summary: Sample Webhook (Money In)
+      summary: Sample Webhook
       operationId: post-api-callback
       tags:
         - Webhook
@@ -244,7 +244,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Webhook(MoneyIn)'
+              $ref: '#/components/schemas/Webhook-Payload'
           application/xml:
             schema:
               type: object
@@ -530,6 +530,26 @@ paths:
         - $ref: '#/components/parameters/X-duitku-code'
         - $ref: '#/components/parameters/X-duitku-timestamp'
         - $ref: '#/components/parameters/X-duitku-signature'
+  /merchant/webhook:
+    post:
+      summary: Merchant Registration Webhook
+      operationId: post-merchant-webhook
+      responses:
+        '200':
+          description: SUCCESS
+      description: ''
+      parameters:
+        - $ref: '#/components/parameters/X-duitku-code'
+        - $ref: '#/components/parameters/X-duitku-timestamp'
+        - $ref: '#/components/parameters/X-duitku-signature'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddMerchant'
+        description: ''
+      tags:
+        - Merchant
 components:
   schemas:
     Balance:
@@ -1688,12 +1708,52 @@ components:
           properties:
             avgVolumePerDay:
               type: number
+              enum:
+                - 1
+                - 2
+                - 3
+              description: |-
+                <ul>
+                <li>1 => less than 50 transactions per day (< 50)</li>
+                <li>2 => 50 to 100 transactions per day (50 - 100)</li>
+                <li>3 => more than 100 transactions per day (> 100)</li>
+                </ul>
             avgVolumePerMonth:
               type: number
+              enum:
+                - 1
+                - 2
+                - 3
+              description: |-
+                <ul>
+                <li>1 => less than 1500 transactions per month (< 1500)</li>
+                <li>2 => 1500 to 3000 transactions per month (1500 - 3000)</li>
+                <li>3 => more than 3000 transactions per month (> 3000)</li>
+                </ul>
             avgNominalPerDay:
               type: number
+              enum:
+                - 1
+                - 2
+                - 3
+              description: |-
+                <ul>
+                <li>1 => less than Rp 5.000.000 per day (< Rp 5.000.000)</li>
+                <li>2 => Rp 5.000.000 to Rp 25.000.000 per day (Rp 5.000.000 - Rp 25.000.000)</li>
+                <li>3 => more than Rp 25.000.000 per day (> Rp 25.000.000)</li>
+                </ul>
             avgNominalPerMonth:
               type: number
+              enum:
+                - 1
+                - 2
+                - 3
+              description: |-
+                <ul>
+                <li>1 => less than Rp 200.000.000 per month (< Rp 200.000.000)</li>
+                <li>2 => Rp 200.000.000 to Rp. 500.000.000 per month (Rp 200.000.000 - Rp. 500.000.000)</li>
+                <li>3 => more than Rp 500.000.000 per month (> Rp 500.000.000)</li>
+                </ul>
         bankInfo:
           type: object
           properties:
@@ -2034,32 +2094,43 @@ components:
         file:
           type: string
           format: binary
-    Webhook(MoneyIn):
+    Webhook-Payload:
       type: object
+      x-examples:
+        example-1:
+          amount: 105455000
+          email: String
+          merchantId: String
+          publisherOrderId: String
+          registerDate: String
+          status: String
+          transactionId: 105455000
+          type: String
+          vaNumber: String
       properties:
         amount:
           type: integer
+        email:
+          type: string
         merchantId:
           type: string
         publisherOrderId:
           type: string
         registerDate:
           type: string
-        type:
-          type: string
-        vaNumber:
+        status:
           type: string
         transactionId:
+          type: integer
+        type:
           type: string
-      x-examples:
-        example-1:
-          amount: 105455000
-          merchantId: '31922'
-          publisherOrderId: '-'
-          registerDate: '2022-04-27 13:59:00'
-          type: money-in-notification
-          vaNumber: '-'
-          transactionId: '-'
+          enum:
+            - money-in-notification
+            - internal-transfer-notification
+            - registration-merchant
+        vaNumber:
+          type: string
+      title: Webhook Payload
     MoneyIn-TransferInternal:
       type: array
       description: ''
