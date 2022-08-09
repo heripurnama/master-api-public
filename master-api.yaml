@@ -12,10 +12,10 @@ info:
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
   termsOfService: 'https://www.duitku.com/kebijakan-privasi/'
 servers:
-  - url: 'https://master-api.duitku.com'
-    description: Production
   - description: Sandbox
     url: 'https://master-api-sandbox.duitku.com'
+  - url: 'https://master-api.duitku.com'
+    description: Production
 paths:
   '/balance/{merchantId}':
     get:
