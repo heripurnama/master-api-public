@@ -2065,13 +2065,9 @@ components:
             - PASPOR
             - KITAS
           description: Type of the attachment
-        fileUrl:
-          type: string
-          minLength: 1
       required:
         - type
         - contentType
-        - fileUrl
     AttachmentRequest:
       title: AttachmentRequest
       type: object
