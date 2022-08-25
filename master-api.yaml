@@ -183,30 +183,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/AllBusinessType'
       operationId: get-businesstype
-  /merchant/:
-    post:
-      summary: Merchant Registration
-      operationId: post-merchant
-      responses:
-        '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/MerchantDetail'
-      tags:
-        - Merchant
-      parameters:
-        - $ref: '#/components/parameters/X-duitku-code'
-        - $ref: '#/components/parameters/X-duitku-timestamp'
-        - $ref: '#/components/parameters/X-duitku-signature'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AddMerchant'
-      x-internal: true
-    parameters: []
   '/merchant/{merchantId}/attachment':
     parameters:
       - $ref: '#/components/parameters/merchantId'
