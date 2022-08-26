@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Master API Duitku
   version: 1.0.0
-  description: "\n\n## \U0001F4AB Overview\n\nOverview Master API Duitku\n\n### \U0001F6E1️ Request Header\nHTTP headers allow the client and the server to pass additional information with the request or the response. A HTTP header consists of its case-insensitive name followed by a colon ':', then by its value (without line breaks), leading by space before the value is ignored.\n\n* __X-duitku-code__\n\n    Duitku code is provided by Duitku.\n\n* __X-duitku-timestamp__\n\n    X-duitku-timestamp is the timestamp of the request. It used UNIX Timestamp.\n\n* __X-duitku-signature__\n\n    The signature is required all request. Signature using hmac and sha256 with request method, relative path, time stamp, hash of entity body, API key and validation key as parameters.\n    \n#### Signature Algorithm\n__signature__ = <b>hmac_sha256(upper(method)+\":\"+path+\":\"+duitku code+\":\"+lower(sha256(body))+\":\"+timestamp, secret key)</b><br/>\n```javascript\nconst moment = require(\"moment\");\n\nfunction getPath(url) {\n    var pathRegex = /.+?\\:\\/\\/.+?(\\/.+?)(?:#|\\?|$)/;\n    var result = url.match(pathRegex);\n    return result && result.length > 1 ? result[1] : ''; \n}\n\nvar timeNow = moment().valueOf();\nvar body = JSON.stringify('your_request_body');\nvar secret_key = 'your_secret_key';\nvar path = getPath(request['url']);\nvar duitku_code = 'your_duitku_code';\nvar method = 'your_request_method'.toUpperCase();\n// Hash Body\nvar body_hash = CryptoJS.SHA256(body).toString().toLowerCase();\n// Plain Text Signature\nvar signaturePlainText = method+\":\"+path+\":\"+duitku_code+\":\"+body_hash+\":\"+timeNow;\n// Signatuere\nvar signature = CryptoJS.HmacSHA256(signaturePlainText, secret_key).toString().toLowerCase();\n```\n "
+  description: "\n\n## \U0001F4AB Overview\n\nOverview Master API Duitku\n\n### \U0001F6E1️ Request Header\nHTTP headers allow the client and the server to pass additional information with the request or the response. A HTTP header consists of its case-insensitive name followed by a colon ':', then by its value (without line breaks), leading by space before the value is ignored.\n\n* __X-duitku-code__\n\n    Duitku code is provided by Duitku.\n\n* __X-duitku-timestamp__\n\n    X-duitku-timestamp is the timestamp of the request. It used UNIX Timestamp.\n\n* __X-duitku-signature__\n\n    The signature is required all request. Signature using hmac and sha256 with request method, relative path, time stamp, hash of entity body, API key and validation key as parameters.\n    \n#### Signature Algorithm\n__signature__ = <b>hmac_sha256(upper(method)+\":\"+path+\":\"+duitku code+\":\"+lower(sha256(body))+\":\"+timestamp, secret key)</b><br/>\n```javascript\nconst moment = require(\"moment\");\n\nfunction getPath(url) {\n    var pathRegex = /.+?\\:\\/\\/.+?(\\/.+?)(?:#|\\?|$)/;\n    var result = url.match(pathRegex);\n    return result && result.length > 1 ? result[1] : ''; \n}\n\nvar timeNow = moment().valueOf();\nvar body = JSON.stringify('your_request_body');\nvar secret_key = 'your_secret_key';\nvar path = getPath(request['url']);\nvar duitku_code = 'your_duitku_code';\nvar method = 'your_request_method'.toUpperCase();\n// Hash Body\nvar body_hash = CryptoJS.SHA256(body).toString().toLowerCase();\n// Plain Text Signature\nvar signaturePlainText = method+\":\"+path+\":\"+duitku_code+\":\"+body_hash+\":\"+timeNow;\n// Signatuere\nvar signature = CryptoJS.HmacSHA256(signaturePlainText, secret_key).toString().toLowerCase();\n```"
   contact:
     name: Duitku Support
     email: it@duitku.com
@@ -207,6 +207,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-duitku-code'
         - $ref: '#/components/parameters/X-duitku-timestamp'
+        - $ref: '#/components/parameters/X-duitku-signature-attachment'
   /api/callback:
     post:
       summary: Sample Webhook
@@ -447,7 +448,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/X-duitku-code'
         - $ref: '#/components/parameters/X-duitku-timestamp'
-        - $ref: '#/components/parameters/X-duitku-signature'
+        - $ref: '#/components/parameters/X-duitku-signature-attachment'
       requestBody:
         content:
           multipart/form-data:
@@ -2521,6 +2522,13 @@ components:
       schema:
         type: string
       description: ID of Project Merchant
+    X-duitku-signature-attachment:
+      name: X-duitku-signature-attachment
+      in: header
+      required: true
+      schema:
+        type: string
+      description: 'The signature is required all request. Signature using hmac and sha256 with request method, relative path, time stamp, hash of entity body, API key and validation key as parameters. But at attachment the body set empty string ( hmac_sha256(upper(method)+":"+path+":"+duitku code+":"+lower(sha256(""))+":"+timestamp, secret key) )'
   responses:
     NotFound:
       description: Resource not found
