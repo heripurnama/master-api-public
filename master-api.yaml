@@ -228,7 +228,7 @@ paths:
               type: object
               properties: {}
         description: ''
-      description: "<b>Note</b>\n- For the base url adjust to the base url of the website you are using.\n- For the string path used for checking signature, especially on webhooks using full path. <br/> Example : `https://your-business-website.com/api/callback`\n\n<b>Money-In Notification Payload</b>\n<code>\n{\n        \"id\": \"8b8af59ff5dd0be1f8fe240c04acd966fc7cf33e\",\n\t\"amount\": 73570,\n\t\"merchantId\": \"74\",\n\t\"publisherOrderId\": \"F1QODFSWWPJROFB0M\",\n\t\"registerDate\": \"2022-08-04 10:53:51\",\n\t\"transactionId\": 124885,\n\t\"type\": \"money-in-notification\",\n\t\"vaNumber\": \"7828700000000074\"\n}\n</code>\n\n<b>Internal-Transafer Notification Payload</b>\n<code>\n{\n        \"id\": \"8b8af59ff5dd0be1f8fe240c04acd966fc7cf33d\",\n\t\"amount\": 10000,\n\t\"merchantId\": \"18567\",\n\t\"registerDate\": \"2022-08-03 10:27:16\",\n\t\"transactionId\": 1831218,\n\t\"type\": \"internal-transfer-notification\",\n}\n</code>\n\n<b>Registration-Merchant Notification Payload</b>\n<code>\n{\n        \"id\": \"8b8af59ff5dd0be1f8fe240c04acd966fc7cf33c\",\n\t\"email\": \"registered_email\",\n\t\"merchantId\": \"18565\",\n\t\"registerDate\": \"2022-08-02 15:06:27\",\n\t\"status\": \"SUCCESS\",\n\t\"type\": \"registration-merchant-notification\",\n}\n</code>\n\n<b>Merchant Status Notification Payload</b>\n<code>\n{\n        \"id\": \"8b8af59ff5dd0be1f8fe240c04acd966fc7cf33b\",\n\t\"email\": \"registered_email\",\n\t\"merchantId\": \"18565\",\n\t\"registerDate\": \"2022-08-02 15:06:27\",\n\t\"status\": \"ACTIVE\",\n\t\"type\": \"merchant-status-notification\",\n}\n</code>\n\n<b>Update Merchant Notification Payload</b>\n<code>\n{\n        \"id\": \"8b8af59ff5dd0be1f8fe240c04acd966fc7cf33a\",\n\t\"email\": \"registered_email\",\n\t\"merchantId\": \"18565\",\n\t\"updateDate\": \"2022-08-02 15:06:27\",\n\t\"status\": \"SUCCESS\",\n\t\"type\": \"update-merchant-notification\",\n}\n</code>"
+      description: "<b>Note</b>\n- For the base url adjust to the base url of the website you are using.\n- For the string path used for checking signature, especially on webhooks using full path. <br/> Example : `https://your-business-website.com/api/callback`\n\n<b>Money-In Notification Payload</b>\n<code>\n{\n        \"id\": \"8b8af59ff5dd0be1f8fe240c04acd966fc7cf33e\",\n\t\"amount\": 73570,\n\t\"merchantId\": \"74\",\n\t\"publisherOrderId\": \"F1QODFSWWPJROFB0M\",\n\t\"registerDate\": \"2022-08-04 10:53:51\",\n\t\"transactionId\": 124885,\n\t\"type\": \"money-in-notification\",\n\t\"vaNumber\": \"7828700000000074\"\n}\n</code>\n\n<b>Internal-Transafer Notification Payload</b>\n<code>\n{\n        \"id\": \"8b8af59ff5dd0be1f8fe240c04acd966fc7cf33d\",\n\t\"amount\": 10000,\n\t\"merchantId\": \"18567\",\n\t\"registerDate\": \"2022-08-03 10:27:16\",\n\t\"transactionId\": 1831218,\n\t\"type\": \"internal-transfer-notification\"\n}\n</code>\n\n<b>Registration-Merchant Notification Payload</b>\n<code>\n{\n        \"id\": \"8b8af59ff5dd0be1f8fe240c04acd966fc7cf33c\",\n\t\"email\": \"registered_email\",\n\t\"merchantId\": \"18565\",\n\t\"registerDate\": \"2022-08-02 15:06:27\",\n\t\"status\": \"SUCCESS\",\n\t\"type\": \"registration-merchant-notification\"\n}\n</code>\n\n<b>Merchant Status Notification Payload</b>\n<code>\n{\n        \"id\": \"8b8af59ff5dd0be1f8fe240c04acd966fc7cf33b\",\n\t\"email\": \"registered_email\",\n\t\"merchantId\": \"18565\",\n\t\"registerDate\": \"2022-08-02 15:06:27\",\n\t\"status\": \"ACTIVE\",\n\t\"type\": \"merchant-status-notification\"\n}\n</code>\n\n<b>Update Merchant Notification Payload</b>\n<code>\n{\n        \"id\": \"8b8af59ff5dd0be1f8fe240c04acd966fc7cf33a\",\n\t\"email\": \"registered_email\",\n\t\"merchantId\": \"18565\",\n\t\"updateDate\": \"2022-08-02 15:06:27\",\n\t\"status\": \"SUCCESS\",\n\t\"type\": \"update-merchant-notification\"\n}\n</code>"
   '/history/{merchantId}/moneyin/internaltransfer':
     parameters:
       - $ref: '#/components/parameters/merchantId'
@@ -1152,6 +1152,9 @@ components:
               swiftCode: IBBKIDJA
               bankAddress: 'Sentral Senayan 3 8 JL. Asia Afrika Kompleks Gelora Bung Karno, Jakarta, 10270'
           disbursementKey: null
+          remittance:
+            id: R-01004
+            secretKey: 998fb45ed90fb576bba6c2034cde2a32
       description: ''
       properties:
         id:
@@ -1347,6 +1350,15 @@ components:
                 type: string
         disbursementKey:
           type: string
+        remittance:
+          type:
+            - string
+            - object
+          properties:
+            id:
+              type: string
+            secretKey:
+              type: string
     AllBusinessType:
       type: array
       description: ''
