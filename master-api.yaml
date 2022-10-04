@@ -1351,9 +1351,7 @@ components:
         disbursementKey:
           type: string
         remittance:
-          type:
-            - string
-            - object
+          type: object
           properties:
             id:
               type: string
