@@ -1099,8 +1099,127 @@ components:
             status: ID
     MerchantDetail:
       type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        status:
+          type: string
+        businessInfo:
+          type: object
+          properties:
+            merchantType:
+              type: integer
+            businessLocation:
+              type: integer
+            businessTypeId:
+              type: integer
+            nationality:
+              type: integer
+            description:
+              type: string
+            brandName:
+              type: string
+            website:
+              type: string
+            businessAddress:
+              type: string
+            domicileAddress:
+              type: string
+            companyName:
+              type: string
+        picInfo:
+          type: object
+          properties:
+            identificationType:
+              type: string
+            identificationNumber:
+              type: string
+            picName:
+              type: string
+            picDob:
+              type: string
+            picAddress:
+              type: string
+            picGender:
+              type: integer
+        transactionProfile:
+          type: object
+          properties:
+            avgVolumePerDay:
+              type: integer
+            avgVolumePerMonth:
+              type: integer
+            avgNominalPerDay:
+              type: integer
+            avgNominalPerMonth:
+              type: integer
+        bankInfo:
+          type: object
+          properties:
+            bankCode:
+              type: string
+            bankName:
+              type: string
+            bankBranch:
+              type: string
+            bankAccountNumber:
+              type: string
+            bankAccountName:
+              type: string
+            swiftCode:
+              type: string
+        customerServiceContactInfo:
+          type: object
+          properties:
+            mainPhoneNumber:
+              type: string
+            emergencyPhoneNumber:
+              type: string
+            email:
+              type: string
+        technicalServiceContactInfo:
+          type: object
+          properties:
+            mainPhoneNumber:
+              type: string
+            emergencyPhoneNumber:
+              type: string
+            email:
+              type: string
+        merchantVaNumber:
+          type: array
+          items:
+            type: object
+            properties:
+              bankCode:
+                type: string
+              bankName:
+                type: string
+              vaNumber:
+                type: string
+              accountNameDifferentBank:
+                type: string
+              accountNameSameBank:
+                type: string
+              swiftCode:
+                type: string
+              bankAddress:
+                type: string
+        disbursementKey:
+          type: 'null'
+        remittance:
+          type: object
+          properties:
+            code:
+              type: string
+            secretKey:
+              type: string
       x-examples:
-        example-1:
+        Example 1:
           id: 16473
           email: email-test@yourbusiness.com
           phoneNumber: '08123123123'
@@ -1153,210 +1272,8 @@ components:
               bankAddress: 'Sentral Senayan 3 8 JL. Asia Afrika Kompleks Gelora Bung Karno, Jakarta, 10270'
           disbursementKey: null
           remittance:
-            id: R-01004
-            secretKey: 998fb45ed90fb576bba6c2034cde2a32
-      description: ''
-      properties:
-        id:
-          type: integer
-        email:
-          type: string
-          maxLength: 100
-          minLength: 1
-        phoneNumber:
-          type: string
-          minLength: 1
-          maxLength: 50
-        status:
-          type: string
-          enum:
-            - ACTIVE
-            - INACTIVE
-            - BLOCKED
-            - REACTIVE
-            - PHONE_NOT_VERIFIED
-            - UNVERFIED
-            - PROCESSING
-            - CLOSED
-            - REJECTED
-          maxLength: 20
-          minLength: 1
-        businessInfo:
-          type: object
-          properties:
-            merchantType:
-              type: integer
-              enum:
-                - 1
-                - 2
-              description: Merchant type consist of Personal (1) or Company (2)
-            businessLocation:
-              type: integer
-              enum:
-                - 1
-                - 2
-              description: 'Business Location consist of 1 (Indonesia), 2 (Overseas)'
-            businessTypeId:
-              type: integer
-              enum:
-                - 1
-                - 2
-              description: data can be obtained from api endpoint /businesstype
-            nationality:
-              type: integer
-              description: 'Nationality consist of 1 (Indonesian), 2 (Foreigner)'
-            countryCode:
-              type: string
-              minLength: 1
-              maxLength: 3
-            description:
-              type: string
-              minLength: 1
-              maxLength: 255
-            brandName:
-              type: string
-              minLength: 1
-              maxLength: 255
-            website:
-              type: string
-              minLength: 1
-              maxLength: 255
-            businessAddress:
-              type: string
-              minLength: 1
-              maxLength: 640
-            domicileAddress:
-              type: string
-              minLength: 0
-              maxLength: 640
-            companyName:
-              type: string
-              minLength: 1
-              maxLength: 100
-        picInfo:
-          type: object
-          properties:
-            identificationType:
-              type: string
-              minLength: 1
-              maxLength: 50
-            identificationNumber:
-              type: string
-              minLength: 1
-              maxLength: 100
-            picName:
-              type: string
-              minLength: 1
-              maxLength: 100
-              enum:
-                - YYYY-MM-DD
-            picDob:
-              type: string
-              minLength: 1
-              maxLength: 10
-            picAddress:
-              type: string
-              minLength: 1
-              maxLength: 255
-            picGender:
-              type: integer
-              description: 'PIC Gender (0 - Female, 1 - Male)'
-        transactionProfile:
-          type: object
-          properties:
-            avgVolumePerDay:
-              type: integer
-            avgVolumePerMonth:
-              type: integer
-            avgNominalPerDay:
-              type: integer
-            avgNominalPerMonth:
-              type: integer
-        bankInfo:
-          type: object
-          properties:
-            bankCode:
-              type: string
-              minLength: 0
-              maxLength: 30
-            bankName:
-              type: string
-              minLength: 0
-              maxLength: 100
-            bankBranch:
-              type: string
-              minLength: 0
-              maxLength: 100
-            bankAccountNumber:
-              type: string
-              minLength: 0
-              maxLength: 50
-            bankAccountName:
-              type: string
-              minLength: 0
-              maxLength: 100
-            swiftCode:
-              type: string
-              minLength: 0
-              maxLength: 100
-        customerServiceContactInfo:
-          type: object
-          properties:
-            mainPhoneNumber:
-              type: string
-              minLength: 0
-              maxLength: 20
-            emergencyPhoneNumber:
-              type: string
-              minLength: 0
-              maxLength: 20
-            email:
-              type: string
-              minLength: 0
-              maxLength: 255
-        technicalServiceContactInfo:
-          type: object
-          properties:
-            mainPhoneNumber:
-              type: string
-              minLength: 0
-              maxLength: 20
-            emergencyPhoneNumber:
-              type: string
-              minLength: 0
-              maxLength: 20
-            email:
-              type: string
-              minLength: 0
-              maxLength: 255
-        merchantVaNumber:
-          type: array
-          items:
-            type: object
-            properties:
-              bankCode:
-                type: string
-              bankName:
-                type: string
-              vaNumber:
-                type: string
-              accountNameDifferentBank:
-                type: string
-              accountNameSameBank:
-                type: string
-              swiftCode:
-                type: string
-              bankAddress:
-                type: string
-        disbursementKey:
-          type: string
-        remittance:
-          type: object
-          properties:
-            id:
-              type: string
-            secretKey:
-              type: string
+            code: R-01004
+            secretKey: 998fb45ed90fb576bba6c2034cde2a31
     AllBusinessType:
       type: array
       description: ''
