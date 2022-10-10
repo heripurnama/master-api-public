@@ -1210,7 +1210,7 @@ components:
               bankAddress:
                 type: string
         disbursementKey:
-          type: 'null'
+          type: string
         remittance:
           type: object
           properties:
@@ -1270,7 +1270,7 @@ components:
               accountNameSameBank: Lorem ipsum dolor sit amet
               swiftCode: IBBKIDJA
               bankAddress: 'Sentral Senayan 3 8 JL. Asia Afrika Kompleks Gelora Bung Karno, Jakarta, 10270'
-          disbursementKey: null
+          disbursementKey: 998fb45ed90fb576bba6c2034cde2a31
           remittance:
             code: R-01004
             secretKey: 998fb45ed90fb576bba6c2034cde2a31
