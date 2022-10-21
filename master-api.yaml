@@ -1113,8 +1113,8 @@ components:
           properties:
             merchantType:
               type: integer
-            businessLocation:
-              type: integer
+            countryCode:
+              type: string
             businessTypeId:
               type: integer
             nationality:
@@ -1131,6 +1131,8 @@ components:
               type: string
             companyName:
               type: string
+            postalCode:
+              type: string
         picInfo:
           type: object
           properties:
@@ -1146,6 +1148,10 @@ components:
               type: string
             picGender:
               type: integer
+            taxId:
+              type: string
+            taxPayer:
+              type: string
         transactionProfile:
           type: object
           properties:
@@ -1161,8 +1167,6 @@ components:
           type: object
           properties:
             bankCode:
-              type: string
-            bankName:
               type: string
             bankBranch:
               type: string
@@ -1220,48 +1224,50 @@ components:
               type: string
       x-examples:
         Example 1:
-          id: 16473
-          email: email-test@yourbusiness.com
-          phoneNumber: '08123123123'
+          id: 19612
+          email: walkonly13+032@gmail.com
+          phoneNumber: '085157841002'
           status: UNVERIFIED
           businessInfo:
             merchantType: 1
-            businessLocation: 1
+            countryCode: IDN
             businessTypeId: 1
-            nationality: 1
-            description: Your business description
-            brandName: Your business brand
-            website: your-business-website.com
-            businessAddress: Your business address
-            domicileAddress: Your domicile address
-            companyName: Your company name
+            nationality: 2
+            description: TEST MASTER API REGIS
+            brandName: TEST MASTER API REGIS
+            website: 'HTTPS://TESTMASTERAPIREGIS.COM'
+            businessAddress: TEST MASTER API REGIS
+            domicileAddress: TEST MASTER API REGIS
+            companyName: TEST MASTER API REGIS
+            postalCode: '12345'
           picInfo:
-            identificationType: KTP
-            identificationNumber: '12345678123'
-            picName: Your pic name
-            picDob: '1/2/1990 12:00:00 AM'
-            picAddress: Your domicile address
+            identificationType: KITAS
+            identificationNumber: '445407004181'
+            picName: TEST MASTER API REGIS
+            picDob: '1996-08-15'
+            picAddress: TEST MASTER API REGIS
             picGender: 1
+            taxId: '1234567891234567'
+            taxPayer: TEST MASTER API REGIS
           transactionProfile:
-            avgVolumePerDay: 0
-            avgVolumePerMonth: 0
-            avgNominalPerDay: 0
-            avgNominalPerMonth: 0
+            avgVolumePerDay: 1
+            avgVolumePerMonth: 1
+            avgNominalPerDay: 1
+            avgNominalPerMonth: 1
           bankInfo:
             bankCode: '014'
-            bankName: Your bank name
-            bankBranch: Your bank branch
-            bankAccountNumber: '12312321'
-            bankAccountName: Your bank account name
-            swiftCode: CXVV
+            bankBranch: Test master api regis
+            bankAccountNumber: '653220876'
+            bankAccountName: Test master api regis
+            swiftCode: ''
           customerServiceContactInfo:
-            mainPhoneNumber: '081231231231'
-            emergencyPhoneNumber: '085123123123'
-            email: cs-test@yourbusiness.com
+            mainPhoneNumber: '085157841002'
+            emergencyPhoneNumber: '085157841002'
+            email: TESTMASTERAPIREGIS@MAIL.COM
           technicalServiceContactInfo:
-            mainPhoneNumber: '085131123412'
-            emergencyPhoneNumber: '081456728908'
-            email: ts-test@yourbusiness.com
+            mainPhoneNumber: '085157841002'
+            emergencyPhoneNumber: '085157841002'
+            email: TESTMASTERAPIREGIS@MAIL.COM
           merchantVaNumber:
             - bankCode: '016'
               bankName: Maybank
@@ -1504,7 +1510,6 @@ components:
           type: object
           required:
             - merchantType
-            - businessLocation
             - businessTypeId
             - nationality
             - countryCode
@@ -1513,6 +1518,7 @@ components:
             - website
             - businessAddress
             - companyName
+            - postalCode
           properties:
             merchantType:
               type: number
@@ -1520,12 +1526,6 @@ components:
               enum:
                 - 1
                 - 2
-            businessLocation:
-              type: number
-              enum:
-                - 1
-                - 2
-              description: 'Business Location consist of 1 (Indonesia), 2 (Overseas)'
             businessTypeId:
               type: number
               description: data can be obtained from api endpoint additionaldata/businesstype
@@ -1564,6 +1564,10 @@ components:
               type: string
               minLength: 1
               maxLength: 100
+            postalCode:
+              type: string
+              maxLength: 5
+              example: '12345'
         picInfo:
           type: object
           required:
@@ -1606,6 +1610,14 @@ components:
                 - 0
                 - 1
               description: 'PIC Gender (0 - Female, 1 - Male)'
+            taxId:
+              type: string
+              maxLength: 16
+              description: Conditional (For merchants located in Indonesia must include NPWP data)
+            taxPayer:
+              type: string
+              maxLength: 100
+              description: Conditional (For merchants located in Indonesia must include NPWP data)
         transactionProfile:
           type: object
           properties:
@@ -1776,7 +1788,6 @@ components:
           type: object
           required:
             - merchantType
-            - businessLocation
             - businessTypeId
             - nationality
             - countryCode
@@ -1785,6 +1796,7 @@ components:
             - website
             - businessAddress
             - companyName
+            - postalCode
           properties:
             merchantType:
               type: number
@@ -1792,12 +1804,6 @@ components:
                 - 1
                 - 2
               description: Merchant type consist of Personal (1) or Company (2)
-            businessLocation:
-              type: number
-              enum:
-                - 1
-                - 2
-              description: 'Business Location consist of 1 (Indonesia), 2 (Overseas)'
             businessTypeId:
               type: number
               description: data can be obtained from api endpoint additionaldata/businesstype
@@ -1836,6 +1842,10 @@ components:
               type: string
               minLength: 1
               maxLength: 100
+            postalCode:
+              type: string
+              maxLength: 5
+              example: '12345'
         picInfo:
           type: object
           required:
@@ -1878,6 +1888,14 @@ components:
                 - 0
                 - 1
               description: 'PIC Gender (0 - Female, 1 - Male)'
+            taxId:
+              type: string
+              maxLength: 16
+              description: Conditional (For merchants located in Indonesia must include NPWP data)
+            taxPayer:
+              type: string
+              maxLength: 100
+              description: Conditional (For merchants located in Indonesia must include NPWP data)
         transactionProfile:
           type: object
           properties:
