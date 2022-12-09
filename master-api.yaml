@@ -505,14 +505,14 @@ paths:
         - $ref: '#/components/parameters/X-duitku-code'
         - $ref: '#/components/parameters/X-duitku-timestamp'
         - $ref: '#/components/parameters/X-duitku-signature'
-  /merchant/callback:
+  /merchant:
     post:
-      summary: Merchant Registration Webhook
+      summary: Merchant Registration
       operationId: post-merchant-webhook
       responses:
         '200':
           description: SUCCESS
-      description: ''
+      description: "Merchant Registration with webhook mechanism. A success response will trigger notify via your webhook endpoint with the following payload.</br>\n\n<b>Registration-Merchant Notification Payload</b>\n<code>\n{\n        \"id\": \"8b8af59ff5dd0be1f8fe240c04acd966fc7cf33c\",\n\t\"email\": \"registered_email\",\n\t\"merchantId\": \"18565\",\n\t\"registerDate\": \"2022-08-02 15:06:27\",\n\t\"status\": \"SUCCESS\",\n\t\"type\": \"registration-merchant-notification\"\n}\n</code>\n"
       parameters:
         - $ref: '#/components/parameters/X-duitku-code'
         - $ref: '#/components/parameters/X-duitku-timestamp'
@@ -1967,7 +1967,6 @@ components:
         - businessInfo
         - picInfo
     AttachmentResponse:
-      description: ''
       type: object
       x-examples:
         example-1:
@@ -1978,17 +1977,24 @@ components:
         type:
           type: string
           minLength: 1
-        contentType:
-          type: string
-          minLength: 1
           enum:
-            - KTP
+            - ID CARD
+            - KITAS
+            - PASPOR
             - NPWP
             - REKBANK
             - WEBAPPSLOGO
-            - PASPOR
-            - KITAS
-          description: Type of the attachment
+            - OFFICE1
+            - OFFICE2
+            - DEED1
+            - DEED2
+            - DECREE1
+            - DECREE2
+            - PORTABLE
+        contentType:
+          type: string
+          minLength: 1
+          description: Extension type of the attachment
       required:
         - type
         - contentType
@@ -2000,17 +2006,28 @@ components:
           type: string
         type:
           type: string
+          example: ID CARD
           enum:
+            - ID CARD
+            - KITAS
+            - PASPOR
             - NPWP
             - REKBANK
             - WEBAPPSLOGO
-            - PASPOR
-            - KITAS
-            - ID CARD
-          example: ID CARD
+            - OFFICE1
+            - OFFICE2
+            - DEED1
+            - DEED2
+            - DECREE1
+            - DECREE2
+            - PORTABLE
+          description: <b>PORTABLE</b> type is only used for file with the .pdf extension
         file:
           type: string
           format: binary
+      required:
+        - type
+        - file
     Webhook-Payload:
       type: object
       x-examples:
