@@ -545,11 +545,47 @@ components:
           effectiveBalance: 1505462393
     BalanceHistory:
       type: array
-      description: ''
-      minItems: 1
-      uniqueItems: true
+      x-examples:
+        Example 1:
+          - registerDate: '2022-12-23 11:22:35'
+            amount: 40000
+            type: C
+            lastBalance: 114009461602
+            description: BCA VA
+            transactionId: 149824
+            disburseId: ''
+            pgTransactionId: BDKMA706M026NWHSB
+            remittanceId: ''
+            voidedId: ''
+            refundedId: ''
       items:
         type: object
+        properties:
+          registerDate:
+            type: string
+            minLength: 1
+          amount:
+            type: integer
+          type:
+            type: string
+            minLength: 1
+          lastBalance:
+            type: integer
+          description:
+            type: string
+            minLength: 1
+          transactionId:
+            type: integer
+          disburseId:
+            type: string
+          pgTransactionId:
+            type: string
+          remittanceId:
+            type: string
+          voidedId:
+            type: string
+          refundedId:
+            type: string
         required:
           - registerDate
           - amount
@@ -557,174 +593,11 @@ components:
           - lastBalance
           - description
           - transactionId
-        properties:
-          registerDate:
-            type: string
-            minLength: 1
-          amount:
-            type: number
-          type:
-            type: string
-            minLength: 1
-          lastBalance:
-            type: number
-          description:
-            type: string
-            minLength: 1
-          transactionId:
-            type: number
-      x-examples:
-        example-1:
-          - registerDate: '2022-03-01 16:00:39'
-            amount: 7354123
-            type: C
-            lastBalance: 9512223
-            description: VA MAYBANK - VAUFCOZGP34BGPXZ1
-            transactionId: 73228
-          - registerDate: '2022-03-01 16:00:03'
-            amount: 11500
-            type: C
-            lastBalance: 2158100
-            description: VA MAYBANK - VA3QLIGWXNGUNJIE8
-            transactionId: 73226
-          - registerDate: '2022-03-01 14:10:11'
-            amount: 70371
-            type: C
-            lastBalance: 2146600
-            description: VA MAYBANK - VAZ5DKAP6AJQXPTYF
-            transactionId: 73215
-          - registerDate: '2022-03-01 14:09:32'
-            amount: 14000
-            type: C
-            lastBalance: 2076229
-            description: VA MAYBANK - VAXS7T21CV4D8PWC4
-            transactionId: 73214
-          - registerDate: '2022-02-23 16:50:42'
-            amount: 996999
-            type: C
-            lastBalance: 2062229
-            description: VA MAYBANK - VAB4S47C1D3NRS37M
-            transactionId: 72973
-          - registerDate: '2022-02-23 14:34:48'
-            amount: 53741
-            type: C
-            lastBalance: 1065230
-            description: VA MAYBANK - VA30MIZBIH4WD5L7B
-            transactionId: 72957
-          - registerDate: '2022-02-23 13:48:49'
-            amount: 70571
-            type: C
-            lastBalance: 1011489
-            description: VA MAYBANK - VA7CR35U05MNF0PT4
-            transactionId: 72950
-          - registerDate: '2022-02-23 12:21:14'
-            amount: 70571
-            type: C
-            lastBalance: 940918
-            description: VA MAYBANK - VAF4UWUWVAAAFQ4GW
-            transactionId: 72938
-          - registerDate: '2022-02-23 12:07:28'
-            amount: 70571
-            type: C
-            lastBalance: 870347
-            description: VA MAYBANK - VAXA8ND6CO4SXRRQW
-            transactionId: 72937
-          - registerDate: '2022-02-23 12:04:53'
-            amount: 70571
-            type: C
-            lastBalance: 799776
-            description: VA MAYBANK - VAG48S8G7LEPIDILK
-            transactionId: 72936
-          - registerDate: '2022-02-23 11:55:10'
-            amount: 9345
-            type: C
-            lastBalance: 729205
-            description: VA MAYBANK - VAH2G8UZQK87XOW3K
-            transactionId: 72935
-          - registerDate: '2022-02-23 11:31:01'
-            amount: 9345
-            type: C
-            lastBalance: 719860
-            description: VA MAYBANK - VA4JVRDOFPLO4TFQM
-            transactionId: 72934
-          - registerDate: '2022-02-23 11:17:53'
-            amount: 70571
-            type: C
-            lastBalance: 710515
-            description: VA MAYBANK - VAOTVX6KS4GZ8B5NK
-            transactionId: 72931
-          - registerDate: '2022-02-23 11:17:43'
-            amount: 70575
-            type: C
-            lastBalance: 639944
-            description: VA MAYBANK - VARJKC2L73QIG78ZN
-            transactionId: 72930
-          - registerDate: '2022-02-23 11:16:09'
-            amount: 70575
-            type: C
-            lastBalance: 569369
-            description: VA MAYBANK - VAPYA7C3IDXJYJ8KQ
-            transactionId: 72929
-          - registerDate: '2022-02-23 11:13:39'
-            amount: 70571
-            type: C
-            lastBalance: 498794
-            description: VA MAYBANK - VAJW3QYWJZDQGQUXH
-            transactionId: 72927
-          - registerDate: '2022-02-23 11:01:59'
-            amount: 68777
-            type: C
-            lastBalance: 428223
-            description: VA MAYBANK - VATGNKDROKT2DJP48
-            transactionId: 72925
-          - registerDate: '2022-02-23 10:58:19'
-            amount: 70575
-            type: C
-            lastBalance: 359446
-            description: VA MAYBANK - VAEIVNEOMFJNIPTGM
-            transactionId: 72924
-          - registerDate: '2022-02-23 10:54:17'
-            amount: 70571
-            type: C
-            lastBalance: 288871
-            description: VA MAYBANK - VAXTWGM0QU4JKEWT6
-            transactionId: 72922
-          - registerDate: '2022-02-23 10:53:19'
-            amount: 12300
-            type: C
-            lastBalance: 218300
-            description: VA MAYBANK - VA5IXZPCKI20HFI5F
-            transactionId: 72921
-          - registerDate: '2022-02-23 10:09:00'
-            amount: 12500
-            type: C
-            lastBalance: 206000
-            description: VA MAYBANK - VA15X3TILYICU1N26
-            transactionId: 72917
-          - registerDate: '2022-02-23 09:49:25'
-            amount: 9500
-            type: C
-            lastBalance: 193500
-            description: VA MAYBANK - VA4WDUW0ULT856M0R
-            transactionId: 72916
-          - registerDate: '2022-02-23 09:49:14'
-            amount: 9500
-            type: C
-            lastBalance: 184000
-            description: VA MAYBANK - VASFNWDE1LJXA1S05
-            transactionId: 72915
-          - registerDate: '2022-02-23 09:48:58'
-            amount: 9500
-            type: C
-            lastBalance: 174500
-            description: VA MAYBANK - VAUQ0YRLAJOH84OEQ
-            transactionId: 72914
-          - registerDate: '2022-02-23 09:37:03'
-            amount: 14000
-            type: C
-            lastBalance: 165000
-            description: VA MAYBANK - VA40J7006A0HNAU04
-            transactionId: 72913
+          - disburseId
+          - pgTransactionId
+          - remittanceId
+          - voidedId
+          - refundedId
     MoneyIn:
       type: array
       description: ''
