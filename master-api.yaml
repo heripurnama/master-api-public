@@ -65,12 +65,17 @@ paths:
               examples:
                 example-1:
                   value:
-                    - registerDate: string
-                      amount: 0
-                      type: string
-                      lastBalance: 0
-                      description: string
-                      transactionId: 0
+                    - registerDate: '2022-12-23 13:53:26'
+                      amount: 120000
+                      type: C
+                      lastBalance: 114009581602
+                      description: BCA VA
+                      transactionId: 149835
+                      disburseId: ''
+                      publisherOrderId: BCNDTRVW22N8S12GW
+                      remittanceId: ''
+                      voidedId: ''
+                      refundedId: ''
       operationId: get-balance-merchantId-history
       parameters:
         - $ref: '#/components/parameters/dateFrom'
