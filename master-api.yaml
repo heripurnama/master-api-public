@@ -62,7 +62,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BalanceHistory'
-              examples: {}
       operationId: get-balance-merchantId-history
       parameters:
         - $ref: '#/components/parameters/dateFrom'
