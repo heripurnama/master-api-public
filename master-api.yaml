@@ -547,14 +547,14 @@ components:
       type: array
       x-examples:
         Example 1:
-          - registerDate: '2022-12-23 11:22:35'
-            amount: 40000
+          - registerDate: '2022-12-23 13:53:26'
+            amount: 120000
             type: C
-            lastBalance: 114009461602
+            lastBalance: 114009581602
             description: BCA VA
-            transactionId: 149824
+            transactionId: 149835
             disburseId: ''
-            pgTransactionId: BDKMA706M026NWHSB
+            publisherOrderId: BCNDTRVW22N8S12GW
             remittanceId: ''
             voidedId: ''
             refundedId: ''
@@ -578,7 +578,7 @@ components:
             type: integer
           disburseId:
             type: string
-          pgTransactionId:
+          publisherOrderId:
             type: string
           remittanceId:
             type: string
@@ -594,7 +594,7 @@ components:
           - description
           - transactionId
           - disburseId
-          - pgTransactionId
+          - publisherOrderId
           - remittanceId
           - voidedId
           - refundedId
